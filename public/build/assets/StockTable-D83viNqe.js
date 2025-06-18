@@ -1,0 +1,1 @@
+import{_ as t}from"./_plugin-vue_export-helper-DlAUqK2U.js";const e={components:{},data(){return{index:2}}};function n(o,a,r,c,s,_){return null}const d=t(e,[["render",n],["__scopeId","data-v-a70926b8"]]);export{d as default};
