@@ -28,28 +28,7 @@ Route::get('oauth/{driver}/callback', [FrontendAuthController::class, 'handlePro
 
   Route::get('/', [HomeController::class, 'maintain'])->name('maintain');
   Route::get('/home', [HomeController::class, 'index'])->name('index');
-  Route::get('/about', [PageController::class, 'about'])->name('about');
-  Route::get('/careers', [PageController::class, 'careers'])->name('careers');
-  Route::get('/our-deleveries', [PageController::class, 'our_deleveries'])->name('our_deleveries');
-  Route::get('/find-a-car', [PageController::class, 'find_a_car'])->name('find_a_car');
-  Route::get('/auction/{model}/{slug}', [PageController::class, 'auction'])->name('auction');
-  Route::get('/auction-stat/{model}/{slug}', [PageController::class, 'auctionStat'])->name('auction.stat');
-  Route::get('/live-auction', [PageController::class, 'Live_auction'])->name('live.auction');
-  Route::get('/service', [PageController::class, 'service'])->name('service');
-  Route::get('/available-cars', [PageController::class, 'available'])->name('available');
-  Route::get('/faq', [PageController::class, 'faq'])->name('faq');
-  Route::get('/testimonials', [PageController::class, 'testimonials'])->name('testimonials');
-  Route::get('/contact', [PageController::class, 'contact'])->name('contact');
-  Route::get('/user-login', [PageController::class, 'login'])->name('user.login');
-  Route::get('/register', [PageController::class, 'register'])->name('register');
-  Route::get('/view-details/{model}/{slug}', [PageController::class, 'product'])->name('product');
-  Route::get('/profile', [PageController::class, 'profile'])->name('profile');
-  Route::post('/profile-update', [FrontendAuthController::class, 'profileUpdate'])->name('profile.update');
-  Route::post('/profile-password-update', [FrontendAuthController::class, 'profilePasswordUpdate'])->name('profile.password.update');
-  Route::get('/how-to-order', [PageController::class, 'HowtoOrder'])->name('how.to.order');
-  Route::get('/knowledge-center', [PageController::class, 'knowledge'])->name('knowledge.center');
-  Route::get('/privacy-policy', [PageController::class, 'PrivacyPolicy'])->name('privacy.policy');
-  Route::post('/contacts', [PageController::class, 'store'])->name('contacts.store');
+
 
 
   Route::get('/forgot-password', [PageController::class, 'forgotpassword'])->name('forgotpassword');
