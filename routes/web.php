@@ -5,24 +5,16 @@ use App\Http\Controllers\BackendAuthController;
 use App\Http\Controllers\BackendUserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\FrontendUserController;
 use App\Http\Controllers\HomebannerController;
 use App\Http\Controllers\InquiryController;
-use App\Http\Controllers\LiveAuctionManufacturerController;
-use App\Http\Controllers\ManufactureController;
 use App\Http\Controllers\MediaLibraryController;
-use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\VehicleManufacture;
-use App\Http\Controllers\VehicleModel;
-use App\Http\Controllers\TestimonialController;
-use App\Http\Controllers\VehicleColorController;
-use App\Http\Controllers\VehicleController;
-use App\Http\Controllers\VehicleModelController;
-use App\Http\Controllers\VehicleTypeController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\DoctorScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,16 +47,39 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
     Route::prefix('inquiry')->group(function () {
         Route::get('/', [InquiryController::class, 'index'])->middleware(['can:inquiry.view'])->name('inquiry.index');
         Route::get('/get/data', [InquiryController::class, 'getData'])->middleware(['can:inquiry.view'])->name('inquiry.getdata');
-        // Route::get('/create', [InquiryController::class, 'create'])->middleware(['can:inquiry.create'])->name('inquiry.create');
-        // Route::post('/store', [InquiryController::class, 'store'])->middleware(['can:inquiry.create'])->name('inquiry.store');
-        // Route::put('/update/status', [VehicleTypeController::class, 'updateStatus'])->middleware(['can:vehicle_type.edit'])->name('vehicle_type.change.status');
+      
         Route::get('/edit/{id}', [InquiryController::class, 'edit'])->middleware(['can:inquiry.edit'])->name('inquiry.edit');
         Route::post('/', [InquiryController::class, 'update'])->middleware(['can:inquiry.edit'])->name('inquiry.update');
         Route::post('/delete', [InquiryController::class, 'destroy'])->middleware(['can:inquiry.delete'])->name('inquiry.delete');
     });
-   
-    
-    // Customer
+
+    Route::prefix('doctor')->group(function () {
+        Route::get('/', [DoctorController::class, 'index'])->middleware(['can:customer.view'])->name('doctor.index');
+        Route::get('/create', [DoctorController::class, 'create'])->middleware(['can:customer.view'])->name('doctor.create');
+        Route::get('/edit/{id}', [DoctorController::class, 'edit'])->middleware(['can:customer.view'])->name('doctor.edit');
+        Route::post('/store', [DoctorController::class, 'store'])->middleware(['can:customer.view'])->name('doctor.store');
+        Route::post('/update', [DoctorController::class, 'update'])->middleware(['can:customer.view'])->name('doctor.update');
+        Route::get('/getdata', [DoctorController::class, 'getData'])->middleware(['can:customer.view'])->name('doctor.getdata');
+    });
+   Route::prefix('doctor-schedule')->group(function () {
+     Route::get('/', [DoctorScheduleController::class, 'index'])->name('doctor-schedule.index');
+    Route::get('/getdata', [DoctorScheduleController::class, 'getData'])->name('doctor-schedule.getdata');
+    Route::get('/create', [DoctorScheduleController::class, 'create'])->name('doctor-schedule.create');
+    Route::get('/edit/{id}', [DoctorScheduleController::class, 'edit'])->name('doctor-schedule.edit');
+    Route::post('/store', [DoctorScheduleController::class, 'store'])->name('doctor-schedule.store');
+    Route::post('/update', [DoctorScheduleController::class, 'update'])->name('doctor-schedule.update');
+    });
+
+Route::prefix('prescription')->group(function () {
+    Route::get('/{scheduleId}', [PrescriptionController::class, 'index'])->name('prescription.index');
+    Route::get('/{scheduleId}/getdata', [PrescriptionController::class, 'getData'])->name('prescription.getdata');
+    Route::get('/{scheduleId}/create', [PrescriptionController::class, 'create'])->name('prescription.create');
+    Route::get('/{scheduleId}/edit/{id}', [PrescriptionController::class, 'edit'])->name('prescription.edit');
+    Route::post('/store', [PrescriptionController::class, 'store'])->name('prescription.store');
+    Route::post('/update', [PrescriptionController::class, 'update'])->name('prescriptionupdate');
+});
+
+
     Route::prefix('customer')->group(function () {
         Route::get('/customer', [CustomerController::class, 'index'])->middleware(['can:customer.view'])->name('customer.index');
         Route::get('/get/data', [CustomerController::class, 'getData'])->middleware(['can:customer.view'])->name('customer.getdata');
@@ -120,6 +135,15 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
         Route::post('/permissions/update', [RoleController::class, 'updatePermissions'])->middleware(['can:roles-permissions.edit'])->name('settings.roles.permissions.update');
         Route::post('/delete', [RoleController::class, 'destroy'])->middleware(['can:roles-permissions.delete'])->name('settings.roles.delete');
     });
+    Route::prefix('employee')->group(function () {
+        Route::get('/', [EmployeeController::class, 'index'])->name('employee.index');
+        Route::get('/getdata', [EmployeeController::class, 'getData'])->name('employee.getdata');
+        Route::get('/create', [EmployeeController::class, 'create'])->name('employee.create');
+        Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+        Route::post('/store', [EmployeeController::class, 'store'])->name('employee.store');
+        Route::post('/update', [EmployeeController::class, 'update'])->name('employee.update');
+    });
+
     // backend users
     Route::prefix('backend-users')->group(function () {
         Route::get('/', [BackendUserController::class, 'index'])->middleware(['can:backend-user.view'])->name('settings.users');
