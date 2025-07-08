@@ -77,49 +77,32 @@ class RolesPermissionSeeder extends Seeder
             // ['section_name' => 'vehicle_cms', 'name' => 'vehicle_cms.create'],
             // ['section_name' => 'vehicle_cms', 'name' => 'vehicle_cms.edit'],
             // ['section_name' => 'vehicle_cms', 'name' => 'vehicle_cms.delete'],
+            ['section_name' => 'doctor', 'name' => 'doctor.view'],
+            ['section_name' => 'doctor', 'name' => 'doctor.create'],
+            ['section_name' => 'doctor', 'name' => 'doctor.edit'],
+            ['section_name' => 'doctor', 'name' => 'doctor.delete'],
+           
+            ['section_name' => 'shedules', 'name' => 'doctorshedule.view'],
+            ['section_name' => 'shedules', 'name' => 'doctorshedule.create'],
+            ['section_name' => 'shedules', 'name' => 'doctorshedule.edit'],
+            ['section_name' => 'shedules', 'name' => 'doctorshedule.delete'],
+           
 
-            //Vehicle type
-            ['section_name' => 'vehicle_type', 'name' => 'vehicle_type.view'],
-            ['section_name' => 'vehicle_type', 'name' => 'vehicle_type.create'],
-            ['section_name' => 'vehicle_type', 'name' => 'vehicle_type.edit'],
-            ['section_name' => 'vehicle_type', 'name' => 'vehicle_type.delete'],
+            ['section_name' => 'prescription', 'name' => 'prescription.view'],
+            ['section_name' => 'prescription', 'name' => 'prescription.create'],
+            ['section_name' => 'prescription', 'name' => 'prescription.edit'],
+            ['section_name' => 'prescription', 'name' => 'prescription.delete'],
 
-            //vehicle_manufacture
-            ['section_name' => 'vehicle_manufacture', 'name' => 'vehicle_manufacture.view'],
-            ['section_name' => 'vehicle_manufacture', 'name' => 'vehicle_manufacture.create'],
-            ['section_name' => 'vehicle_manufacture', 'name' => 'vehicle_manufacture.edit'],
-            ['section_name' => 'vehicle_manufacture', 'name' => 'vehicle_manufacture.delete'],
+            ['section_name' => 'employees', 'name' => 'employees.view'],
+            ['section_name' => 'employees', 'name' => 'employees.create'],
+            ['section_name' => 'employees', 'name' => 'employees.edit'],
+            ['section_name' => 'employees', 'name' => 'employees.delete'],
 
-            //vehicle_model
-            ['section_name' => 'vehicle_model', 'name' => 'vehicle_model.view'],
-            ['section_name' => 'vehicle_model', 'name' => 'vehicle_model.create'],
-            ['section_name' => 'vehicle_model', 'name' => 'vehicle_model.edit'],
-            ['section_name' => 'vehicle_model', 'name' => 'vehicle_model.delete'],
-
-            //vehicle_color
-            ['section_name' => 'vehicle_color', 'name' => 'vehicle_color.view'],
-            ['section_name' => 'vehicle_color', 'name' => 'vehicle_color.create'],
-            ['section_name' => 'vehicle_color', 'name' => 'vehicle_color.edit'],
-            ['section_name' => 'vehicle_color', 'name' => 'vehicle_color.delete'],
-
-            //vehicle_feature
-            ['section_name' => 'vehicle_feature', 'name' => 'vehicle_feature.view'],
-            ['section_name' => 'vehicle_feature', 'name' => 'vehicle_feature.create'],
-            ['section_name' => 'vehicle_feature', 'name' => 'vehicle_feature.edit'],
-            ['section_name' => 'vehicle_feature', 'name' => 'vehicle_feature.delete'],
-            
-            //vehicle
-            ['section_name' => 'vehicle', 'name' => 'vehicle.view'],
-            ['section_name' => 'vehicle', 'name' => 'vehicle.create'],
-            ['section_name' => 'vehicle', 'name' => 'vehicle.edit'],
-            ['section_name' => 'vehicle', 'name' => 'vehicle.delete'],
-
-            //Vehicle testimonials
-            ['section_name' => 'testimonials', 'name' => 'testimonials.view'],
-            ['section_name' => 'testimonials', 'name' => 'testimonials.create'],
-            ['section_name' => 'testimonials', 'name' => 'testimonials.edit'],
-            ['section_name' => 'testimonials', 'name' => 'testimonials.delete'],
-
+            ['section_name' => 'pharmacy', 'name' => 'pharmacy.view'],
+            ['section_name' => 'pharmacy', 'name' => 'pharmacy.create'],
+            ['section_name' => 'pharmacy', 'name' => 'pharmacy.edit'],
+            ['section_name' => 'pharmacy', 'name' => 'pharmacy.delete'],
+            //Newsletter
             //Newsletter
             ['section_name' => 'newsletter', 'name' => 'newsletter.view'],
             ['section_name' => 'newsletter', 'name' => 'newsletter.create'],

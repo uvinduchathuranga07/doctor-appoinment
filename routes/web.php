@@ -54,29 +54,29 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
     });
 
     Route::prefix('doctor')->group(function () {
-        Route::get('/', [DoctorController::class, 'index'])->middleware(['can:customer.view'])->name('doctor.index');
-        Route::get('/create', [DoctorController::class, 'create'])->middleware(['can:customer.view'])->name('doctor.create');
-        Route::get('/edit/{id}', [DoctorController::class, 'edit'])->middleware(['can:customer.view'])->name('doctor.edit');
-        Route::post('/store', [DoctorController::class, 'store'])->middleware(['can:customer.view'])->name('doctor.store');
-        Route::post('/update', [DoctorController::class, 'update'])->middleware(['can:customer.view'])->name('doctor.update');
-        Route::get('/getdata', [DoctorController::class, 'getData'])->middleware(['can:customer.view'])->name('doctor.getdata');
+        Route::get('/', [DoctorController::class, 'index'])->middleware(['can:doctor.view'])->name('doctor.index');
+        Route::get('/create', [DoctorController::class, 'create'])->middleware(['can:doctor.create'])->name('doctor.create');
+        Route::get('/edit/{id}', [DoctorController::class, 'edit'])->middleware(['can:doctor.edit'])->name('doctor.edit');
+        Route::post('/store', [DoctorController::class, 'store'])->middleware(['can:doctor.create'])->name('doctor.store');
+        Route::post('/update', [DoctorController::class, 'update'])->middleware(['can:doctor.edit'])->name('doctor.update');
+        Route::get('/getdata', [DoctorController::class, 'getData'])->middleware(['can:doctor.view'])->name('doctor.getdata');
     });
    Route::prefix('doctor-schedule')->group(function () {
-     Route::get('/', [DoctorScheduleController::class, 'index'])->name('doctor-schedule.index');
-    Route::get('/getdata', [DoctorScheduleController::class, 'getData'])->name('doctor-schedule.getdata');
-    Route::get('/create', [DoctorScheduleController::class, 'create'])->name('doctor-schedule.create');
-    Route::get('/edit/{id}', [DoctorScheduleController::class, 'edit'])->name('doctor-schedule.edit');
-    Route::post('/store', [DoctorScheduleController::class, 'store'])->name('doctor-schedule.store');
-    Route::post('/update', [DoctorScheduleController::class, 'update'])->name('doctor-schedule.update');
+     Route::get('/', [DoctorScheduleController::class, 'index'])->middleware(['can:doctorshedule.view'])->name('doctor-schedule.index');
+    Route::get('/getdata', [DoctorScheduleController::class, 'getData'])->middleware(['can:doctorshedule.view'])->name('doctor-schedule.getdata');
+    Route::get('/create', [DoctorScheduleController::class, 'create'])->middleware(['can:doctorshedule.create'])->name('doctor-schedule.create');
+    Route::get('/edit/{id}', [DoctorScheduleController::class, 'edit'])->middleware(['can:doctorshedule.edit'])->name('doctor-schedule.edit');
+    Route::post('/store', [DoctorScheduleController::class, 'store'])->middleware(['can:doctorshedule.create'])->name('doctor-schedule.store');
+    Route::post('/update', [DoctorScheduleController::class, 'update'])->middleware(['can:doctorshedule.edit'])->name('doctor-schedule.update');
     });
 
 Route::prefix('prescription')->group(function () {
-    Route::get('/{scheduleId}', [PrescriptionController::class, 'index'])->name('prescription.index');
-    Route::get('/{scheduleId}/getdata', [PrescriptionController::class, 'getData'])->name('prescription.getdata');
-    Route::get('/{scheduleId}/create', [PrescriptionController::class, 'create'])->name('prescription.create');
-    Route::get('/{scheduleId}/edit/{id}', [PrescriptionController::class, 'edit'])->name('prescription.edit');
-    Route::post('/store', [PrescriptionController::class, 'store'])->name('prescription.store');
-    Route::post('/update', [PrescriptionController::class, 'update'])->name('prescriptionupdate');
+    Route::get('/{scheduleId}', [PrescriptionController::class, 'index'])->middleware(['can:prescription.view'])->name('prescription.index');
+    Route::get('/{scheduleId}/getdata', [PrescriptionController::class, 'getData'])->middleware(['can:prescription.view'])->name('prescription.getdata');
+    Route::get('/{scheduleId}/create', [PrescriptionController::class, 'create'])->middleware(['can:prescription.create'])->name('prescription.create');
+    Route::get('/{scheduleId}/edit/{id}', [PrescriptionController::class, 'edit'])->middleware(['can:prescription.edit'])->name('prescription.edit');
+    Route::post('/store', [PrescriptionController::class, 'store'])->middleware(['can:prescription.create'])->name('prescription.store');
+    Route::post('/update', [PrescriptionController::class, 'update'])->middleware(['can:prescription.edit'])->name('prescriptionupdate');
 });
 
 

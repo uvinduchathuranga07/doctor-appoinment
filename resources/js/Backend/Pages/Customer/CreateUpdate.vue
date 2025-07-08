@@ -3,8 +3,8 @@
         <div class="row">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h5>Customers</h5>
-                    <p>Manage Customers.</p>
+                    <h5>Employees</h5>
+                    <p>Manage Employees.</p>
                 </div>
                 <hr />
                 <div class="alert alert-primary" v-if="form.id && form.enrolled_affiliate == 1 && !form.enrolled_affiliate_id">

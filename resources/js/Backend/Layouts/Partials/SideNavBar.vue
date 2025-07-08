@@ -18,24 +18,91 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
+ <li class="menu-item" :class="{ active: addActiveClass(['dashboard']) }">
+        <Link :href="route('dashboard')" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-tachometer"></i>
+          <div data-i18n="Dashboard">Dashboard</div>
+        </Link>
+      </li>
 
+      <!-- Inquiry -->
+      <li class="menu-item" :class="{ active: addActiveClass(['inquiry.index', 'inquiry.getdata', 'inquiry.edit']) }"
+          v-if="$root.hasPermission('inquiry.view')">
+        <Link :href="route('inquiry.index')" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-question-mark"></i>
+          <div data-i18n="Inquiry">Inquiry</div>
+        </Link>
+      </li>
+
+      <!-- Doctors -->
+      <li class="menu-item" :class="{ active: addActiveClass(['doctor.index','doctor.create','doctor.edit','doctor.getdata']) }"
+          v-if="$root.hasPermission('doctor.view')">
+        <Link :href="route('doctor.index')" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-user-pin"></i>
+          <div data-i18n="Doctors">Doctors</div>
+        </Link>
+      </li>
+
+      <!-- Doctor Schedules -->
+      <li class="menu-item" :class="{ active: addActiveClass(['doctor-schedule.index','doctor-schedule.create','doctor-schedule.edit','doctor-schedule.getdata']) }"
+          v-if="$root.hasPermission('doctorshedule.view')">
+        <Link :href="route('doctor-schedule.index')" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-calendar"></i>
+          <div data-i18n="Doctor Schedules">Doctor Schedules</div>
+        </Link>
+      </li>
+
+      <!-- Prescriptions -->
+      <li class="menu-item"
+          v-if="$root.hasPermission('prescription.view') && $page.props.scheduleId"
+          :class="{ active: addActiveClass(['prescription.index','prescription.getdata','prescription.create','prescription.edit']) }">
+        <Link :href="route('prescription.index', $page.props.scheduleId)" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-notepad"></i>
+          <div data-i18n="Prescriptions">Prescriptions</div>
+        </Link>
+      </li>
+
+      <!-- Customer (existing) -->
+      <li class="menu-item" :class="{ active: addActiveClass(['customer.index','customer.create','customer.edit']) }"
+          v-if="$root.hasPermission('customer.view') && !$page.props.branch">
+        <Link :href="route('customer.index', { c: 'default' })" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-user"></i>
+          <div data-i18n="Customer">Customer</div>
+        </Link>
+      </li>
+  <li class="menu-item" :class="{ active: addActiveClass(['customer.index','customer.create','customer.edit']) }"
+          v-if="$root.hasPermission('customer.view') && !$page.props.branch">
+        <Link :href="route('customer.index', { c: 'default' })" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-book"></i>
+          <div data-i18n="Customer">Reports</div>
+        </Link>
+      </li>
+      
+
+      <li class="menu-item" :class="{ active: addActiveClass(['customer.index','customer.create','customer.edit']) }"
+          v-if="$root.hasPermission('customer.view') && !$page.props.branch">
+        <Link :href="route('customer.index', { c: 'default' })" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-building"></i>
+          <div data-i18n="Customer">Pharmacy</div>
+        </Link>
+      </li>
       <!-- Dashboards -->
-      <li class="menu-item" v-bind:class="{ active: addActiveClass(['dashboard']) }">
+      <!-- <li class="menu-item" v-bind:class="{ active: addActiveClass(['dashboard']) }">
         <Link :href="route('dashboard')" class="menu-link">
         <i class="menu-icon tf-icons bx bx-tachometer"></i>
         <div data-i18n="Dashboards">Dashboard</div>
         </Link>
-      </li>
+      </li> -->
       <!-- Inquiry -->
      
       <!-- Media Library -->
-      <li class="menu-item" v-bind:class="{ active: addActiveClass(['media.index']) }"
+      <!-- <li class="menu-item" v-bind:class="{ active: addActiveClass(['media.index']) }"
         v-if="$root.hasPermission('media.view') && !$page.props.branch">
         <Link :href="route('media.index', { c: 'default' })" class="menu-link">
         <i class="menu-icon tf-icons bx bx-photo-album"></i>
         <div data-i18n="Medai Library">Medai Library</div>
         </Link>
-      </li>
+      </li> -->
 
     
          
@@ -47,7 +114,7 @@
         
 
       <!-- Customer-->
-      <li class="menu-item" v-bind:class="{
+      <!-- <li class="menu-item" v-bind:class="{
         active: addActiveClass([
           'customer.index',
           'customer.create',
@@ -59,7 +126,7 @@
 
         <div data-i18n="Customer">Customer</div>
         </Link>
-      </li>
+      </li> -->
       <!-- Affiliate Config-->
       <!-- <li class="menu-item" v-bind:class="{
         active: addActiveClass([

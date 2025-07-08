@@ -47,7 +47,7 @@
           </select>
         </li> -->
         <!-- Notification -->
-        <!-- <li
+        <li
           class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1"
         >
           <a
@@ -379,7 +379,7 @@
               </a>
             </li>
           </ul>
-        </li> -->
+        </li>
         <!--/ Notification -->
         <!-- User -->
         <li class="nav-item navbar-dropdown dropdown-user dropdown">
