@@ -61,235 +61,15 @@ class CustomerAuthController extends Controller
         }
     }
 
-    public function loginWithGoogle(Request $request)
-    {
-        $validator = $this->validator([
-            'token' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->errorResponse($validator->messages(), 422);
-        }
-
-        $url = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' . $request->token;
-        try {
-
-            $httpResponse = Http::get($url);
-            if ($httpResponse->ok()) {
-                $body = $httpResponse->body();
-                $body = json_decode($body, true);
-                if (isset($body["email"])) {
-                    $firstName = $body["given_name"];
-                    $lastName = $body["family_name"];
-                    $email = $body["email"];
-                    $userName = $firstName . " " . $lastName;
-
-                    return $this->createSocialUser($userName, $email, null, null);
-                }
-            } else {
-                return $this->errorResponse('Unauthenticated User', 401, ResponseCodeEnum::UNAUTHENTICATED);
-            }
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return $this->errorResponse('Something went wrong.Please Try again.', 500);
-        }
-    }
-
-    public function loginWithFacebook(Request $request)
-    {
-        $validator = $this->validator([
-            'token' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->errorResponse($validator->messages(), 422);
-        }
-        $fields = 'id,name,first_name,last_name,email';
-        $url = 'https://graph.facebook.com/me/?fields=' . $fields . '&access_token=' . $request->token;
-        try {
-
-            $httpResponse = Http::get($url);
-            if ($httpResponse->ok()) {
-                $body = $httpResponse->body();
-                $body = json_decode($body, true);
-                if (isset($body["email"])) {
-                    $firstName = strtolower($body["first_name"]);
-                    $lastName = strtolower($body["last_name"]);
-                    $email = $body["email"];
-                    $userName = $firstName . " " . $lastName;
-
-                    return $this->createSocialUser($userName, $email, null, null);
-                }
-            } else {
-                return $this->errorResponse('Unauthenticated User', 401, ResponseCodeEnum::UNAUTHENTICATED);
-            }
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return $this->errorResponse('Something went wrong.Please Try again.', 500);
-        }
-    }
-
-    public function loginWithApple(Request $request)
-    {
-        $validator = $this->validator([
-            'token' => 'required',
-            'team_id' => 'required',
-            'bundle_id' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->errorResponse($validator->messages(), 422);
-        }
-
-        try {
-            if (!$this->appleAuthKeyFileExist()) {
-                Log::error('You need to upload AuthKey_XXXX.p8 file');
-                return $this->errorResponse('Something went wrong.Please Try again.', 401, ResponseCodeEnum::UNAUTHENTICATED);
-            }
-
-            $token = $this->appleSigninTokenGenerate('com.nikoba.auction',
-             $request->team_id, $request->token);
-
-            if ($token == false) {
-                Log::error('You need to upload AuthKey_XXXX.p8 file');
-                return $this->errorResponse('Invalid authorization_code', 401, ResponseCodeEnum::UNAUTHENTICATED);
-            }
-            $decoded = $this->jwtDecode($token);
-            $userEmail = $decoded["email"];
-            if (!isset($userEmail)) {
-                return $this->errorResponse('Can\'t get the email to create account.', 401, ResponseCodeEnum::UNAUTHENTICATED);
-            }
-
-            $displayName = explode("@", $userEmail)[0];
-            $firstName = $request->first_name;
-            $lastName = $request->last_name;
-            if (isset($firstName) && isset($lastName) && !empty($firstName)) {
-                $displayName = $firstName . ' ' . $lastName;
-            }
-
-
-            return $this->createSocialUser($displayName, $userEmail, null, null);
-
-            // return $this->errorResponse('Unauthenticated User', 401, ResponseCodeEnum::UNAUTHENTICATED);
-
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return $this->errorResponse('Something went wrong.Please Try again.', 500);
-        }
-    }
-
-    public function loginWithSms(Request $request)
-    {
-        $validator = $this->validator([
-            'country_code' => 'required',
-            'mobile' => 'required|min:10'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->errorResponse($validator->messages(), 422);
-        }
-
-        $countryCode = $request->country_code;
-        $mobileNumber = $request->mobile;
-
-        try {
-            $user = Customer::where('phone', $mobileNumber)->first();
-
-            if ($user) {
-                if (auth('customer')->loginUsingId($user->id)) {
-                    $token = $user->createToken('APPLICATION_CUSTOMER')->plainTextToken;
-                    $this->sendOtp($user);
-                    return $this->successResponse(['token' => $token], 'Login Successfully');
-                } else {
-                    return $this->errorResponse('Unauthenticated User', 401, ResponseCodeEnum::UNAUTHENTICATED);
-                }
-            } else {
-                $customer = Customer::create([
-                    'name' => $request->mobile,
-                    'phone' => $request->mobile,
-                    'referral_code' => Helpers::randomStringGenarator(10),
-                    'email' => $request->mobile . '@gmail.com',
-                    'password' => Hash::make(Carbon::now())
-                ]);
-
-                // Mail::to($customer->email)->send(new CustomerRegisterSuccess($customer));
-
-                if (auth('customer')->loginUsingId($customer->id)) {
-                    $user = auth('customer')->user();
-                    $token = $user->createToken('APPLICATION_CUSTOMER')->plainTextToken;
-                    $this->sendOtp($user);
-                    return $this->successResponse(['token' => $token], 'Login Successfully');
-                } else {
-                    return $this->errorResponse('Unauthenticated User', 401, ResponseCodeEnum::UNAUTHENTICATED);
-                }
-            }
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return $this->errorResponse('Something went wrong.Please Try again.', 500);
-        }
-    }
-
-    public function createSocialUser($name, $email, $password, $dob)
-    {
-        if (!Customer::where('email', $email)->first()) {
-            $customer = Customer::create([
-                'name' => $name,
-                'email' => $email,
-                'type' => 'app',
-                'password' => $password ? $password : Hash::make(Carbon::now())
-            ]);
-            // Mail::to($customer->email)->send(new CustomerRegisterSuccess($customer));
-        } else {
-            $customer = Customer::where('email', $email)->first();
-        }
-
-        if (auth('customer')->loginUsingId($customer->id)) {
-            $user = auth('customer')->user();
-            $token = $user->createToken('APPLICATION_CUSTOMER')->plainTextToken;
-            return $this->successResponse(['token' => $token], 'Login Successfully');
-        } else {
-            return $this->errorResponse('Unauthenticated User', 401, ResponseCodeEnum::UNAUTHENTICATED);
-        }
-    }
-
-    public function loginWithMobile(Request $request)
-    {
-        $validator = $this->validator([
-            'mobile' => 'required|min:10',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->errorResponse($validator->messages(), 422);
-        }
-
-        try {
-            $user = Customer::where(['mobile' => $request->mobile,])->first();
-
-            if ($user) {
-                $user = auth('customer')->user();
-                $token = $user->createToken('APPLICATION_CUSTOMER')->plainTextToken;
-                // $this->sendOtp($user->id);
-                return $this->successResponse(['token' => $token], 'Login Successfully');
-            } else {
-                return $this->errorResponse('No User Found', 401, ResponseCodeEnum::NO_USER);
-            }
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return $this->errorResponse($th->getMessage(), 500);
-        }
-    }
-
     public function register(Request $request)
     {
         $validator = $this->validator([
             'name' => 'required',
             'email' => 'required|email|unique:customers,email',
-            //"mobile" => 'required|min:10|unique:customers,phone',
-            // 'dob' => 'required',
-            'password' => 'required|min:8|confirmed'
-        ], [
+            'password' => 'required|min:8'
+        ], 
+        [
             'email.unique' => 'The email has already been registered.',
-            // 'dob.required' => 'The date of birth field requred'
         ]);
 
         if ($validator->fails()) {
@@ -303,15 +83,11 @@ class CustomerAuthController extends Controller
             $customer->email = $request->email;
             $customer->phone = $request->mobile;
             $customer->password = Hash::make($request->password);
-            $customer->type = 'app';
             $customer->save();
-
-            // Mail::to($customer->email)->send(new CustomerRegisterSuccess($customer));
 
             if (auth('customer')->loginUsingId($customer->id)) {
                 $user = auth('customer')->user();
                 $token = $user->createToken('APPLICATION_CUSTOMER')->plainTextToken;
-                // $this->sendOtp($user);
                 return $this->successResponse(['token' => $token], 'Login Successfully');
             } else {
                 return $this->errorResponse('Unauthenticated User', 401, ResponseCodeEnum::UNAUTHENTICATED);
@@ -321,41 +97,7 @@ class CustomerAuthController extends Controller
             return $this->errorResponse('Something went wrong.Please Try again.', 500);
         }
     }
-    public function registerWithMobile(Request $request)
-    {
-        $validator = $this->validator([
-            'mobile' => 'required'
-        ]);
 
-        if ($validator->fails()) {
-            return $this->errorResponse($validator->messages(), 422);
-        }
-        try {
-            $data = [
-                'first_name' => Helpers::randomStringGenarator(),
-                'last_name' => Helpers::randomStringGenarator(),
-                'phone' => $request->mobile,
-                'referral_code' => Helpers::randomStringGenarator(10),
-                'type'=> 'app',
-                'password' => Hash::make(now())
-            ];
-
-            $customer = Customer::create($data);
-
-
-            if (auth('customer')->loginUsingId($customer->id)) {
-                $user = auth('customer')->user();
-                $token = $user->createToken('APPLICATION_CUSTOMER')->plainTextToken;
-                $this->sendOtp($user);
-                return $this->successResponse(['token' => $token], 'Login Successfully');
-            } else {
-                return $this->errorResponse('Unauthenticated User', 401, ResponseCodeEnum::UNAUTHENTICATED);
-            }
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return $this->errorResponse($th->getMessage(), 500);
-        }
-    }
 
     public function resetPassword(Request $request)
     {
