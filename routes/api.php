@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\v1\ModelController;
 use App\Http\Controllers\Api\v1\VehicleController;
 use App\Http\Controllers\Api\v1\VehicleTypeController;
 use App\Http\Controllers\Frontend\InquiryController;
+
+use App\Http\Controllers\Api\v1\DoctorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,36 +56,13 @@ Route::prefix('v1')->group(function() {
             Route::post('/update-avatar', [CustomerAuthController::class, 'updateAvatar']);
             Route::post('/avatar-image-upload', [CustomerAuthController::class, 'uploadAvatar']);
             Route::put('/firebase-token', [CustomerAuthController::class, 'firebaseToken']);
-
-
-
         });
     });
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
-        Route::get('/get-affiliate-data', [CustomerAuthController::class, 'affiliateData']);
-        Route::post('/request-affiliate', [CustomerController::class, 'enrollToAffiliate']);
+        Route::post('/getdoctors',[DoctorController::class,'index']);
+        Route::post('/getspecialCat',[DoctorController::class,'getSpeciallity']);
     });
     
-    Route::get('local-stock', [VehicleController::class, 'index']);
-    Route::get('local-stock/{id}', [VehicleController::class, 'details']);
-    Route::get('local-models', [ModelController::class, 'index']);
-    Route::get('local-manufactures', [ManufactureController::class, 'index']);
-    Route::get('local-types', [VehicleTypeController::class, 'index']);
-
-    Route::get('auction-list', [AuctionController::class, 'index']);
-    Route::get('auction-list/{id}', [AuctionController::class, 'details']);
-    Route::get('auction-manufactures', [AuctionController::class, 'manufactures']);
-    Route::get('auction-models', [AuctionController::class, 'models']);
-    Route::get('auction-years', [AuctionController::class, 'years']);
-    Route::get('auction-chassisids', [AuctionController::class, 'chassisids']);
-    Route::get('auction-capacity', [AuctionController::class, 'capacity']);
-    Route::get('auction-dates', [AuctionController::class, 'dates']);
-    Route::get('auction-stats', [AuctionController::class, 'stats']);
-    Route::get('auction-stats-details/{id}', [AuctionController::class, 'statsDeails']);
-
-
-    Route::post('submit-inquiry', [InquiryController::class, 'submitAppInquiry']);
-    Route::get('list-inquiry', [InquiryController::class, 'getInquires']);
 });
  
