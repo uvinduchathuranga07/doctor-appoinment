@@ -15,6 +15,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\DoctorScheduleController;
+use App\Http\Controllers\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,6 +62,37 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
         Route::post('/update', [DoctorController::class, 'update'])->middleware(['can:doctor.edit'])->name('doctor.update');
         Route::get('/getdata', [DoctorController::class, 'getData'])->middleware(['can:doctor.view'])->name('doctor.getdata');
     });
+
+    Route::prefix('specialization')->group(function () {
+    Route::get('/', [SpecializationController::class, 'index'])
+        ->middleware(['can:doctorshedule.view'])
+        ->name('specialization.index');
+
+    Route::get('/create', [SpecializationController::class, 'create'])
+        ->middleware(['can:doctorshedule.create'])
+        ->name('specialization.create');
+
+    Route::get('/edit/{id}', [SpecializationController::class, 'edit'])
+        ->middleware(['can:doctorshedule.edit'])
+        ->name('specialization.edit');
+
+    Route::post('/store', [SpecializationController::class, 'store'])
+        ->middleware(['can:doctorshedule.create'])
+        ->name('specialization.store');
+
+    Route::post('/update', [SpecializationController::class, 'update'])
+        ->middleware(['can:doctorshedule.edit'])
+        ->name('specialization.update');
+
+    Route::get('/getdata', [SpecializationController::class, 'getData'])
+        ->middleware(['can:doctorshedule.view'])
+        ->name('specialization.getdata');
+
+    // If you added a destroy() method:
+    Route::delete('/destroy', [SpecializationController::class, 'destroy'])
+        ->middleware(['can:doctorshedule.delete'])
+        ->name('specialization.destroy');
+});
    Route::prefix('doctor-schedule')->group(function () {
      Route::get('/', [DoctorScheduleController::class, 'index'])->middleware(['can:doctorshedule.view'])->name('doctor-schedule.index');
     Route::get('/getdata', [DoctorScheduleController::class, 'getData'])->middleware(['can:doctorshedule.view'])->name('doctor-schedule.getdata');
