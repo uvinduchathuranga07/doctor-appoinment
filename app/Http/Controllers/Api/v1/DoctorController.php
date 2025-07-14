@@ -69,5 +69,15 @@ class DoctorController extends Controller
             return $this->errorResponse('Something went wrong.Please Try again.', 500);
         }
     }
-
+    
+    public function getAppointmentByCustomer(Request $request){
+        try{
+            $appointment = Appointment::with('doctor')->where('patient_id',$request->patient_id)->get();
+            return $this->successResponse($appointment, 'Apointment List');
+        }
+        catch(\Throwable $th){
+            Log::error($th);
+            return $this->errorResponse('Something went wrong.Please Try again.', 500);
+        }
+    }
 }
