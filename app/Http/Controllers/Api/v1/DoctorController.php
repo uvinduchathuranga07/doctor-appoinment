@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Doctor;
+use App\Models\Appointment;
 use App\Models\Specialization;
 use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\DB;
 
 class DoctorController extends Controller
-{
+{   
     use ApiResponse;
 
     public function index(Request $request){
@@ -40,6 +42,29 @@ class DoctorController extends Controller
             return $this->successResponse($speciallity, 'Speciality List');
         }
         catch(\Throwable $th){
+            Log::error($th);
+            return $this->errorResponse('Something went wrong.Please Try again.', 500);
+        }
+    }
+
+    public function saveAppointment(Request $request){
+        try {
+            Log::alert($request);
+            DB::beginTransaction();
+
+            $appointment = new Appointment();
+            $appointment-> doctor_id = $request -> doctor_id;
+            $appointment-> patient_id = $request -> patient_id;
+            $appointment-> appointment_date = $request -> appointment_date;
+            $appointment-> start_time = $request -> start_time;
+            
+            $appointment->save();
+            DB::commit();
+            
+            return $this->successResponse($appointment, 'Appointment Saved');
+        }
+        catch(\Throwable $th){
+            DB::rollBack();
             Log::error($th);
             return $this->errorResponse('Something went wrong.Please Try again.', 500);
         }
