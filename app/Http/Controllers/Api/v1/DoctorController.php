@@ -15,11 +15,13 @@ class DoctorController extends Controller
 
     public function index(Request $request){
        try {
-        Log::alert("message");
-            $specializationId = $request->spec_id;
-            $query = Doctor::with('specialization');
-            if($specializationId){
-                $query = where('specialization_id',$specializationId);
+            $specializationId = $request->specialization_id;
+            $query = Doctor::with('specialization')->with('schedules');
+
+            Log::alert($specializationId);
+
+            if($specializationId && $specializationId>0){
+                $query = $query->where('specialization_id',$specializationId);
             }
 
             $doctors = $query->get();
@@ -42,4 +44,5 @@ class DoctorController extends Controller
             return $this->errorResponse('Something went wrong.Please Try again.', 500);
         }
     }
+
 }
