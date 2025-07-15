@@ -62,6 +62,8 @@ Route::prefix('v1')->group(function() {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/getdoctors',[DoctorController::class,'index']);
         Route::post('/getspecialCat',[DoctorController::class,'getSpeciallity']);
+        Route::post('/setappointment',[DoctorController::class,'saveAppointment']);
+        Route::post('/getappointment',[DoctorController::class,'getAppointmentByCustomer']);
     });
     
 });
