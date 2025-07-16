@@ -83,7 +83,7 @@ class DoctorController extends Controller
 
     public function cancelAppointment(Request $request){
         try{
-            $appointmentId = $request->id;
+            $appointmentId = $request->appointment_id;
             Appointment::destroy($appointmentId);
             return $this->successResponse('Apointment Deleted');
         }
