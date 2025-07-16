@@ -68,6 +68,7 @@ Route::prefix('v1')->group(function() {
         Route::post('/getappointment',[DoctorController::class,'getAppointmentByCustomer']);
 
         Route::get('/getcampaigns',[campaignController::class,'getCampaigns']);
+        Route::get('/cancelappointment',[campaignController::class,'cancelAppointment']);   
     });
     
 });

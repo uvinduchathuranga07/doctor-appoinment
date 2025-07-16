@@ -112,29 +112,12 @@ Route::prefix('prescription')->group(function () {
 });
 
 Route::prefix('campaign')->group(function () {
-    Route::get('/', [CampaignController::class, 'index'])
-        ->middleware(['can:campaign.view'])
-        ->name('campaign.index');
-
-    Route::get('/getdata', [CampaignController::class, 'getData'])
-        ->middleware(['can:campaign.view'])
-        ->name('campaign.getdata');
-
-    Route::get('/create', [CampaignController::class, 'create'])
-        ->middleware(['can:campaign.create'])
-        ->name('campaign.create');
-
-    Route::get('/edit/{id}', [CampaignController::class, 'edit'])
-        ->middleware(['can:campaign.edit'])
-        ->name('campaign.edit');
-
-    Route::post('/store', [CampaignController::class, 'store'])
-        ->middleware(['can:campaign.create'])
-        ->name('campaign.store');
-
-    Route::post('/update', [CampaignController::class, 'update'])
-        ->middleware(['can:campaign.edit'])
-        ->name('campaign.update');
+    Route::get('/', [CampaignController::class, 'index'])->middleware(['can:campaign.view'])->name('campaign.index');
+    Route::get('/getdata', [CampaignController::class, 'getData'])->middleware(['can:campaign.view'])->name('campaign.getdata');
+    Route::get('/create', [CampaignController::class, 'create'])->middleware(['can:campaign.create'])->name('campaign.create');
+    Route::get('/edit/{id}', [CampaignController::class, 'edit'])->middleware(['can:campaign.edit'])->name('campaign.edit');
+    Route::post('/store', [CampaignController::class, 'store'])->middleware(['can:campaign.create'])->name('campaign.store');
+    Route::post('/update', [CampaignController::class, 'update'])->middleware(['can:campaign.edit'])->name('campaign.update');
     Route::delete('/destroy', [CampaignController::class, 'destroy'])->middleware(['can:campaign.delete']) ->name('campaign.destroy');
 });
 
@@ -152,7 +135,6 @@ Route::prefix('campaign')->group(function () {
         Route::post('/affiliate-enroll/{id}', [CustomerController::class, 'confirmAffiliateRequest'])->middleware(['can:customer.view'])->name('affilate-customer.enroll');
     });
 
-    // profile
     Route::prefix('profile')->group(function () {
         Route::get('/', [BackendAuthController::class, 'showProfile'])->name('admin.profile');
         Route::put('/update-user-photo', [BackendAuthController::class, 'uploadProfilePhoto'])->middleware(['can:profile.updatePhoto'])->name('profile.update-photo');
@@ -161,7 +143,7 @@ Route::prefix('campaign')->group(function () {
         Route::post('/disable', [BackendAuthController::class, 'disableProfile'])->middleware(['can:profile.deactivate'])->name('profile.disable');
         Route::post('/delete', [BackendAuthController::class, 'deleteProfile'])->middleware(['can:profile.delete'])->name('profile.delete');
     });
-    // settings
+
     Route::prefix('settings')->group(function () {
         Route::get('/general', [SettingsController::class, 'generalSettings'])->middleware(['can:settings.view'])->name('settings.general');
         Route::post('/general', [SettingsController::class, 'generalSettingsUpdate'])->middleware(['can:settings.edit'])->name('settings.general.update');
