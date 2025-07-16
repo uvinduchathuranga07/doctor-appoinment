@@ -112,17 +112,10 @@ Route::prefix('prescription')->group(function () {
 });
 
 Route::prefix('campaign')->group(function () {
-    Route::get('/', [CampaignController::class, 'index'])
-        ->middleware(['can:campaign.view'])
-        ->name('campaign.index');
+    Route::get('/', [CampaignController::class, 'index'])->middleware(['can:campaign.view'])->name('campaign.index');
+    Route::get('/getdata', [CampaignController::class, 'getData'])->middleware(['can:campaign.view'])->name('campaign.getdata');
 
-    Route::get('/getdata', [CampaignController::class, 'getData'])
-        ->middleware(['can:campaign.view'])
-        ->name('campaign.getdata');
-
-    Route::get('/create', [CampaignController::class, 'create'])
-        ->middleware(['can:campaign.create'])
-        ->name('campaign.create');
+    Route::get('/create', [CampaignController::class, 'create'])->middleware(['can:campaign.create'])->name('campaign.create');
 
     Route::get('/edit/{id}', [CampaignController::class, 'edit'])
         ->middleware(['can:campaign.edit'])
