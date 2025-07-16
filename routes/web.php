@@ -16,6 +16,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\SpecializationController;
+use App\Http\Controllers\CampaignController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,7 +49,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
     Route::prefix('inquiry')->group(function () {
         Route::get('/', [InquiryController::class, 'index'])->middleware(['can:inquiry.view'])->name('inquiry.index');
         Route::get('/get/data', [InquiryController::class, 'getData'])->middleware(['can:inquiry.view'])->name('inquiry.getdata');
-      
         Route::get('/edit/{id}', [InquiryController::class, 'edit'])->middleware(['can:inquiry.edit'])->name('inquiry.edit');
         Route::post('/', [InquiryController::class, 'update'])->middleware(['can:inquiry.edit'])->name('inquiry.update');
         Route::post('/delete', [InquiryController::class, 'destroy'])->middleware(['can:inquiry.delete'])->name('inquiry.delete');
@@ -111,6 +111,32 @@ Route::prefix('prescription')->group(function () {
     Route::post('/update', [PrescriptionController::class, 'update'])->middleware(['can:prescription.edit'])->name('prescriptionupdate');
 });
 
+Route::prefix('campaign')->group(function () {
+    Route::get('/', [CampaignController::class, 'index'])
+        ->middleware(['can:campaign.view'])
+        ->name('campaign.index');
+
+    Route::get('/getdata', [CampaignController::class, 'getData'])
+        ->middleware(['can:campaign.view'])
+        ->name('campaign.getdata');
+
+    Route::get('/create', [CampaignController::class, 'create'])
+        ->middleware(['can:campaign.create'])
+        ->name('campaign.create');
+
+    Route::get('/edit/{id}', [CampaignController::class, 'edit'])
+        ->middleware(['can:campaign.edit'])
+        ->name('campaign.edit');
+
+    Route::post('/store', [CampaignController::class, 'store'])
+        ->middleware(['can:campaign.create'])
+        ->name('campaign.store');
+
+    Route::post('/update', [CampaignController::class, 'update'])
+        ->middleware(['can:campaign.edit'])
+        ->name('campaign.update');
+    Route::delete('/destroy', [CampaignController::class, 'destroy'])->middleware(['can:campaign.delete']) ->name('campaign.destroy');
+});
 
     Route::prefix('customer')->group(function () {
         Route::get('/customer', [CustomerController::class, 'index'])->middleware(['can:customer.view'])->name('customer.index');
