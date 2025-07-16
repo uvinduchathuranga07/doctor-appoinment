@@ -32,7 +32,9 @@
             </div>
           </div>
           <button type="submit" class="btn btn-main me-2">Save</button>
-          <Link class="btn btn-outline-danger" :href="route('campaign.index')">Cancel</Link>
+          <Link class="btn btn-outline-danger" :href="route('campaign.index')">
+            Cancel
+          </Link>
         </form>
       </div>
     </div>
@@ -40,6 +42,7 @@
 </template>
 
 <script>
+import { ref } from 'vue'                    // ← add this
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { Link, useForm } from '@inertiajs/inertia-vue3'
 
@@ -54,7 +57,10 @@ export default {
       details: props.campaign?.details || '',
       image: null,
     })
-    const preview = ref(props.campaign?.photopath ? '/' + props.campaign.photopath : null)
+
+    const preview = ref(
+      props.campaign?.photopath ? '/' + props.campaign.photopath : null
+    )
 
     function handleFile(e) {
       form.image = e.target.files[0]
@@ -63,12 +69,14 @@ export default {
 
     function submit() {
       form.post(
-        props.campaign ? route('campaign.update') : route('campaign.store'),
+        props.campaign
+          ? route('campaign.update')
+          : route('campaign.store'),
         { preserveState: true }
       )
     }
 
     return { form, preview, handleFile, submit }
-  }
+  },
 }
 </script>
