@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\v1\VehicleTypeController;
 use App\Http\Controllers\Frontend\InquiryController;
 
 use App\Http\Controllers\Api\v1\DoctorController;
+use App\Http\Controllers\Api\v1\campaignController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +66,8 @@ Route::prefix('v1')->group(function() {
         Route::post('/getspecialCat',[DoctorController::class,'getSpeciallity']);
         Route::post('/setappointment',[DoctorController::class,'saveAppointment']);
         Route::post('/getappointment',[DoctorController::class,'getAppointmentByCustomer']);
+
+        Route::get('/getcampaigns',[campaignController::class,'getCampaigns']);
     });
     
 });
