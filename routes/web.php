@@ -17,6 +17,7 @@ use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -110,6 +111,14 @@ Route::prefix('prescription')->group(function () {
     Route::post('/store', [PrescriptionController::class, 'store'])->middleware(['can:prescription.create'])->name('prescription.store');
     Route::post('/update', [PrescriptionController::class, 'update'])->middleware(['can:prescription.edit'])->name('prescriptionupdate');
 });
+
+Route::get('appointments/book',    [AppointmentController::class, 'index'])->name('appointments.book');
+Route::post('appointments/store',  [AppointmentController::class, 'store'])->name('appointments.store');
+Route::get('appointments/slots/{doctorId}', [AppointmentController::class, 'getAvailableSlots'])
+     ->name('appointments.getAvailableSlots');
+Route::get('appointments',         [AppointmentController::class, 'list'])->name('appointments.list');
+Route::get('appointments/data',    [AppointmentController::class, 'getData'])->name('appointments.getdata');
+
 
 Route::prefix('campaign')->group(function () {
     Route::get('/', [CampaignController::class, 'index'])->middleware(['can:campaign.view'])->name('campaign.index');
