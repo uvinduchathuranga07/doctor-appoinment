@@ -70,6 +70,7 @@ Route::prefix('v1')->group(function() {
 
         Route::get('/getcampaigns',[campaignController::class,'getCampaigns']);
         Route::post('/savecampaigns',[campaignController::class,'saveCampaigns']);
+        Route::post('/getcampaignsbyuser',[campaignController::class,'getCampaignsByuser']);
     });
     
 });
