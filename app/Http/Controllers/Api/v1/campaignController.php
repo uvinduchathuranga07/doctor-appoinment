@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\JoinEvent;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class campaignController extends Controller
 {
@@ -28,9 +29,22 @@ class campaignController extends Controller
 
     public function getCampaignsByuser(Request $request){
         try{
-            $user = Customer::with('campaings')->find($request->userId);
+            $user = Customer::with('campaings')->find(request()->user()->id);
             $campaings = $user->campaings;
             return $this->successResponse($campaings, 'User registered campangs List');
+        }
+        catch(\Throwable $th){
+            Log::error($th);
+            return $this->errorResponse('Something went wrong.Please Try again.', 500);
+        }
+    }
+
+    public function leaveformCampaigns(Request $request){
+        try{
+            $user = Customer::find(request()->user()->id);
+            $user->campaings()->detach($request->eventId);
+
+            return $this->successResponse('Users leaved successfully');
         }
         catch(\Throwable $th){
             Log::error($th);
@@ -41,6 +55,14 @@ class campaignController extends Controller
     public function saveCampaigns(Request $request){
         try {
             Log::alert($request);
+
+            $user = Customer::find(request()->user()->id);
+
+            $alreadyJoined = $user->campaings()->wherePivot('event_id', $request->event_id)->exists();
+            if($alreadyJoined){
+                return $this->errorResponse('You already joined to this event.', 500);
+            }
+
             DB::beginTransaction();
 
             $joinEvent = new JoinEvent();
