@@ -66,8 +66,10 @@ Route::prefix('v1')->group(function() {
         Route::post('/getspecialCat',[DoctorController::class,'getSpeciallity']);
         Route::post('/setappointment',[DoctorController::class,'saveAppointment']);
         Route::post('/getappointment',[DoctorController::class,'getAppointmentByCustomer']);
+        Route::post('/cancelappointment',[DoctorController::class,'cancelAppointment']); 
 
         Route::get('/getcampaigns',[campaignController::class,'getCampaigns']);
+        Route::post('/savecampaigns',[campaignController::class,'saveCampaigns']);
     });
     
 });

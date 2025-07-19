@@ -154,7 +154,6 @@ Route::prefix('campaign')->group(function () {
         Route::post('/affiliate-enroll/{id}', [CustomerController::class, 'confirmAffiliateRequest'])->middleware(['can:customer.view'])->name('affilate-customer.enroll');
     });
 
-    // profile
     Route::prefix('profile')->group(function () {
         Route::get('/', [BackendAuthController::class, 'showProfile'])->name('admin.profile');
         Route::put('/update-user-photo', [BackendAuthController::class, 'uploadProfilePhoto'])->middleware(['can:profile.updatePhoto'])->name('profile.update-photo');
@@ -163,7 +162,7 @@ Route::prefix('campaign')->group(function () {
         Route::post('/disable', [BackendAuthController::class, 'disableProfile'])->middleware(['can:profile.deactivate'])->name('profile.disable');
         Route::post('/delete', [BackendAuthController::class, 'deleteProfile'])->middleware(['can:profile.delete'])->name('profile.delete');
     });
-    // settings
+
     Route::prefix('settings')->group(function () {
         Route::get('/general', [SettingsController::class, 'generalSettings'])->middleware(['can:settings.view'])->name('settings.general');
         Route::post('/general', [SettingsController::class, 'generalSettingsUpdate'])->middleware(['can:settings.edit'])->name('settings.general.update');

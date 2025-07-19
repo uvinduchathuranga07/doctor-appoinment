@@ -80,4 +80,16 @@ class DoctorController extends Controller
             return $this->errorResponse('Something went wrong.Please Try again.', 500);
         }
     }
+
+    public function cancelAppointment(Request $request){
+        try{
+            $appointmentId = $request->appointment_id;
+            Appointment::destroy($appointmentId);
+            return $this->successResponse('Apointment Deleted');
+        }
+        catch(\Throwable $th){
+            Log::error($th);
+            return $this->errorResponse('Something went wrong.Please Try again.', 500);
+        }
+    }
 }
