@@ -112,22 +112,56 @@ class AppointmentController extends Controller
     /**
      * JSON for DataTables.
      */
-    public function getData()
-    {
-        $appts = Appointment::with(['doctor', 'patient'])->get();
+public function getData()
+{
+    $appointments = Appointment::with(['doctor', 'patient'])->get();
 
-        return DataTables::of($appts)
-            ->addColumn('doctor',  fn($a) => $a->doctor?->name ?? '—')
-            ->addColumn('patient', fn($a) => $a->patient?->name ?? '—')
-            ->addColumn('date',    fn($a) => $a->appointment_date)
-            ->addColumn('time',    fn($a) => $a->start_time)
-            ->addColumn('status',  fn($a) => ucfirst($a->status))
-           ->addColumn('action', fn($row) => sprintf(
-    '<button class="btn btn-sm btn-outline-secondary btn-prescribe" data-item-id="%d">Prescription</button>',
-    $row->id
-))
-->rawColumns(['action','check'])
+    return DataTables::of($appointments)
+        ->addColumn('check', function ($row) {
+            return '<div class="custom-control custom-checkbox item-check">
+                <input type="checkbox" class="form-check-input" id="' . $row->id . '" value="' . $row->id . '">
+                <label class="form-check-label" for="' . $row->id . '"></label>
+            </div>';
+        })
+        ->addColumn('doctor', function ($row) {
+            return $row->doctor?->name ?? '—';
+        })
+        ->addColumn('patient', function ($row) {
+            return $row->patient?->name ?? '—';
+        })
+        ->addColumn('date', function ($row) {
+            return $row->appointment_date;
+        })
+        ->addColumn('time', function ($row) {
+            return $row->start_time;
+        })
+        ->addColumn('status', function ($row) {
+            $status = ucfirst($row->status);
+            $badgeClass = match ($row->status) {
+                'pending' => 'bg-warning',
+                'completed' => 'bg-success',
+                'cancelled' => 'bg-danger',
+                default => 'bg-secondary',
+            };
+            return '<span class="badge ' . $badgeClass . '">' . $status . '</span>';
+        })
+        ->addColumn('action', function ($row) {
+            $prescriptionUrl = route('prescription.create', $row->id);
 
-            ->make(true);
-    }
+            return '<div class="btn-group">
+                <button type="button" class="btn btn-main btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Action
+                </button>
+                <div class="dropdown-menu" style="min-width: 10rem;">
+                    <a class="dropdown-item text-primary" href="' . $prescriptionUrl . '">
+                        <i class="fas fa-notes-medical mr-2"></i> Prescription
+                    </a>
+                </div>
+            </div>';
+        })
+        ->rawColumns(['check', 'status', 'action'])
+        ->make(true);
+}
+
+
 }

@@ -72,6 +72,10 @@ class RolesPermissionSeeder extends Seeder
             ['section_name' => 'system-setting', 'name' => 'system-setting.edit'],
             ['section_name' => 'system-setting', 'name' => 'system-setting.delete'],
             
+            ['section_name' => 'product', 'name' => 'product.view'],
+            ['section_name' => 'product', 'name' => 'product.create'],
+            ['section_name' => 'product', 'name' => 'product.edit'],
+            ['section_name' => 'product', 'name' => 'product.delete'],
             //vehicle cms
             // ['section_name' => 'vehicle_cms', 'name' => 'vehicle_cms.view'],
             // ['section_name' => 'vehicle_cms', 'name' => 'vehicle_cms.create'],
