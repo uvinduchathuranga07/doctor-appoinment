@@ -12,6 +12,7 @@ use App\Http\Controllers\MediaLibraryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\DoctorScheduleController;
@@ -94,6 +95,35 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
         ->middleware(['can:doctorshedule.delete'])
         ->name('specialization.destroy');
 });
+Route::prefix('product')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])
+        ->middleware(['can:product.view'])
+        ->name('product.index');
+
+    Route::get('/getdata', [ProductController::class, 'getData'])
+        ->middleware(['can:product.view'])
+        ->name('product.getdata');
+
+    Route::get('/create', [ProductController::class, 'create'])
+        ->middleware(['can:product.create'])
+        ->name('product.create');
+
+    Route::post('/store', [ProductController::class, 'store'])
+        ->middleware(['can:product.create'])
+        ->name('product.store');
+
+    Route::get('/edit/{id}', [ProductController::class, 'edit'])
+        ->middleware(['can:product.edit'])
+        ->name('product.edit');
+
+    Route::post('/update', [ProductController::class, 'update'])
+        ->middleware(['can:product.edit'])
+        ->name('product.update');
+
+    Route::post('/delete', [ProductController::class, 'destroy'])
+        ->middleware(['can:product.delete'])
+        ->name('product.delete');
+});
    Route::prefix('doctor-schedule')->group(function () {
      Route::get('/', [DoctorScheduleController::class, 'index'])->middleware(['can:doctorshedule.view'])->name('doctor-schedule.index');
     Route::get('/getdata', [DoctorScheduleController::class, 'getData'])->middleware(['can:doctorshedule.view'])->name('doctor-schedule.getdata');
@@ -104,13 +134,31 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
     });
 
 Route::prefix('prescription')->group(function () {
-    Route::get('/{scheduleId}', [PrescriptionController::class, 'index'])->middleware(['can:prescription.view'])->name('prescription.index');
-    Route::get('/{scheduleId}/getdata', [PrescriptionController::class, 'getData'])->middleware(['can:prescription.view'])->name('prescription.getdata');
-    Route::get('/{scheduleId}/create', [PrescriptionController::class, 'create'])->middleware(['can:prescription.create'])->name('prescription.create');
-    Route::get('/{scheduleId}/edit/{id}', [PrescriptionController::class, 'edit'])->middleware(['can:prescription.edit'])->name('prescription.edit');
-    Route::post('/store', [PrescriptionController::class, 'store'])->middleware(['can:prescription.create'])->name('prescription.store');
-    Route::post('/update', [PrescriptionController::class, 'update'])->middleware(['can:prescription.edit'])->name('prescriptionupdate');
+    Route::get('/{appointmentId}', [PrescriptionController::class, 'index'])
+        ->middleware(['can:prescription.view'])
+        ->name('prescription.index');
+
+    Route::get('/{appointmentId}/getdata', [PrescriptionController::class, 'getData'])
+        ->middleware(['can:prescription.view'])
+        ->name('prescription.getdata');
+
+    Route::get('/{appointmentId}/create', [PrescriptionController::class, 'create'])
+        ->middleware(['can:prescription.create'])
+        ->name('prescription.create');
+
+    Route::get('/{appointmentId}/edit/{id}', [PrescriptionController::class, 'edit'])
+        ->middleware(['can:prescription.edit'])
+        ->name('prescription.edit');
+
+    Route::post('/store', [PrescriptionController::class, 'store'])
+        ->middleware(['can:prescription.create'])
+        ->name('prescription.store');
+
+    Route::post('/update', [PrescriptionController::class, 'update'])
+        ->middleware(['can:prescription.edit'])
+        ->name('prescription.update');
 });
+
 
 Route::get('appointments/book',    [AppointmentController::class, 'index'])->name('appointments.book');
 Route::post('appointments/store',  [AppointmentController::class, 'store'])->name('appointments.store');

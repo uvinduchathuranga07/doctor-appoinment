@@ -6,11 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Prescription extends Model
 {
-    protected $fillable = ['doctor_schedule_id', 'patient_id', 'details'];
+    protected $fillable = [
+        'appointment_id',
+        'patient_id',
+        'details',
+        'status',
+        'pharmacy_name',
+    ];
 
-    public function schedule()
+    protected $casts = [
+        'details' => 'array', // Automatically cast JSON to array
+    ];
+
+    public function appointment()
     {
-        return $this->belongsTo(DoctorSchedule::class, 'doctor_schedule_id');
+        return $this->belongsTo(Appointment::class, 'appointment_id');
     }
 
     public function patient()

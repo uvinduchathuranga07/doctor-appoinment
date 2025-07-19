@@ -1,147 +1,104 @@
 <template>
   <AppLayout>
-    <div class="card mb-4">
-      <div class="card-header d-flex justify-content-between">
-        <h5>Book Appointment</h5>
-        <Link
-          :href="route('appointments.list')"
-          class="btn btn-outline-secondary"
-        >
-          <i class="bx bx-list-ul"></i> View Appointments
-        </Link>
-      </div>
-      <div class="card-body">
-        <form @submit.prevent="submit">
-          <div class="row">
-            <!-- Doctor -->
-            <div class="mb-3 col-md-4">
-              <label class="form-label">Doctor</label>
-              <select
-                class="form-control"
-                v-model="form.doctor_id"
-              >
-                <option disabled value="">Select a doctor</option>
-                <option
-                  v-for="doc in doctors"
-                  :key="doc.id"
-                  :value="doc.id"
-                >
-                  {{ doc.name }} ({{ doc.specialization?.name }})
-                </option>
-              </select>
-              <div class="text-danger">{{ form.errors.doctor_id }}</div>
-            </div>
-
-            <!-- Date -->
-            <div class="mb-3 col-md-4">
-              <label class="form-label">Date</label>
-              <input
-                type="date"
-                class="form-control"
-                v-model="form.appointment_date"
-              />
-              <div class="text-danger">{{ form.errors.appointment_date }}</div>
-            </div>
-
-            <!-- Slots -->
-            <div class="mb-3 col-md-4">
-              <label class="form-label">Available Slots</label>
-              <div v-if="loading" class="py-2">Loading…</div>
-              <div v-else-if="slots.length">
-                <div class="btn-group flex-wrap" role="group">
-                  <button
-                    v-for="slot in slots"
-                    :key="slot"
-                    type="button"
-                    class="btn"
-                    :class="{
-                      'btn-primary': form.start_time === slot,
-                      'btn-outline-primary': form.start_time !== slot
-                    }"
-                    @click="selectSlot(slot)"
-                  >
-                    {{ slot }}
-                  </button>
-                </div>
-              </div>
-              <div v-else class="py-2 text-muted">
-                No slots available
-              </div>
-              <div class="text-danger">{{ form.errors.start_time }}</div>
-            </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="card-header pb-0">
+            <h5>Appointments</h5>
+            <p>List of booked appointments</p>
           </div>
-
-          <button type="submit" class="btn btn-main">Book</button>
-        </form>
+          <div class="card-body">
+            <data-table ref="datatable" :url="route('appointments.getdata')" :columns="columns" :columnDefs="columnDefs">
+              <template #header>
+                <tr>
+                  <th width="10%">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="form-check-input" id="selectAll" @click="selectAll($event)" />
+                      <label class="form-check-label" for="selectAll"></label>
+                    </div>
+                  </th>
+                  <th>Doctor</th>
+                  <th>Patient</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </template>
+            </data-table>
+          </div>
+        </div>
       </div>
     </div>
   </AppLayout>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { useForm, Link } from '@inertiajs/inertia-vue3'
-import axios from 'axios'
+import DataTable from '@/Components/DataTable.vue'
+import { useForm } from '@inertiajs/inertia-vue3'
 
 export default {
-  components: { AppLayout, Link },
-  props: { doctors: Array },
-  setup(props) {
-    const form = useForm({
-      doctor_id: '',
-      appointment_date: '',
-      start_time: '',
-    })
-    const slots = ref([])
-    const loading = ref(false)
-    // Use the globally-available Ziggy helper:
-    const route = window.route
-
-    // Reload slots on doctor or date change
-    const fetchSlots = async () => {
-      if (!form.doctor_id || !form.appointment_date) {
-        slots.value = []
-        return
-      }
-      loading.value = true
-      try {
-        const response = await axios.get(
-          route('appointments.getAvailableSlots', form.doctor_id),
-          { params: { date: form.appointment_date } }
-        )
-        slots.value = Array.isArray(response.data)
-          ? response.data
-          : response.data.slots || []
-      } catch {
-        slots.value = []
-      } finally {
-        loading.value = false
-      }
-    }
-
-    watch(
-      () => [form.doctor_id, form.appointment_date],
-      fetchSlots
-    )
-
-    const selectSlot = (slot) => {
-      form.start_time = slot
-    }
-
-    const submit = () => {
-      form.post(route('appointments.store'))
-    }
-
+  components: { AppLayout, DataTable },
+  data() {
     return {
-      form,
-      slots,
-      loading,
-      selectSlot,
-      submit,
-      route,
-      doctors: props.doctors,
+      form: useForm({ id: '' }),
+      selectedRows: [],
+      columns: [
+        { data: 'check', name: 'check', orderable: false, searchable: false },
+        { data: 'doctor', name: 'doctor' },
+        { data: 'patient', name: 'patient' },
+        { data: 'date', name: 'date' },
+        { data: 'time', name: 'time' },
+        { data: 'status', name: 'status' },
+        { data: 'action', name: 'action', orderable: false },
+      ],
+      columnDefs: [{ className: 'text-center', targets: [] }],
     }
+  },
+  mounted() {
+    const self = this
+    $('#mytable tbody').on('click', 'tr .btn-prescribe', (evt) => {
+      const id = $(evt.target).data('item-id')
+      this.$inertia.visit(route('prescription.create', id))
+    })
+    $('#mytable tbody').on('click', '.item-check input[type=checkbox]', (evt) => {
+      const val = $(evt.target).val()
+      if ($(evt.target).prop('checked') && !self.selectedRows.includes(val)) {
+        self.getSelectedItems(val)
+      } else {
+        self.removeUnselectedItem(val)
+      }
+    })
+  },
+  methods: {
+    reloadTable() {
+      this.$refs.datatable.reloadDatatable()
+    },
+    getSelectedItems(value) {
+      this.selectedRows.push(value)
+    },
+    selectAll(evt) {
+      const self = this
+      if ($(evt.target).is(':checked')) {
+        $('.item-check input[type=checkbox]').prop('checked', true)
+        $('.item-check input[type=checkbox]:checked').each(function () {
+          if (!self.selectedRows.includes(this.value)) {
+            self.getSelectedItems(this.value)
+          }
+        })
+      } else {
+        $('.item-check input[type=checkbox]').prop('checked', false)
+        $('.item-check input[type=checkbox]').each(function () {
+          if (self.selectedRows.includes(this.value)) {
+            self.removeUnselectedItem(this.value)
+          }
+        })
+      }
+    },
+    removeUnselectedItem(value) {
+      this.selectedRows = this.selectedRows.filter((val) => val !== value)
+    },
   },
 }
 </script>
