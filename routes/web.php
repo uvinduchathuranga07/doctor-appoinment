@@ -134,11 +134,11 @@ Route::prefix('product')->group(function () {
     });
 
 Route::prefix('prescription')->group(function () {
-    Route::get('/{appointmentId}', [PrescriptionController::class, 'index'])
+    Route::get('/', [PrescriptionController::class, 'index'])
         ->middleware(['can:prescription.view'])
         ->name('prescription.index');
 
-    Route::get('/{appointmentId}/getdata', [PrescriptionController::class, 'getData'])
+    Route::get('/getdata', [PrescriptionController::class, 'getData'])
         ->middleware(['can:prescription.view'])
         ->name('prescription.getdata');
 
