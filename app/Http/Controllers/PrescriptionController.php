@@ -34,12 +34,47 @@ class PrescriptionController extends Controller
         ->addColumn('date', fn($p) => optional($p->appointment)->appointment_date)
         ->addColumn('status', fn($p) => ucfirst($p->status))
         ->addColumn('pharmacy', fn($p) => $p->pharmacy_name ?? '-')
-        ->addColumn('action', fn($p) => '
-            <a href="' . route('prescription.edit', [$p->appointment_id, $p->id]) . '" class="btn btn-sm btn-outline-primary">Edit</a>
-        ')
+       ->addColumn('action', fn($p) => '
+    <a href="' . route('prescription.show', $p->id) . '" class="btn btn-sm btn-outline-info">View</a>
+')
         ->rawColumns(['action'])
         ->make(true);
 }
+public function show($id)
+{
+    $prescription = Prescription::with(['appointment.doctor', 'patient'])->findOrFail($id);
+
+    // Manual parsing of string like "{1,2},{3,5}"
+    $raw = $prescription->details;
+    $pairs = [];
+
+    preg_match_all('/\{(\d+),(\d+)\}/', $raw, $matches, PREG_SET_ORDER);
+
+    foreach ($matches as $match) {
+        $pairs[] = [
+            'product_id' => (int) $match[1],
+            'quantity' => (int) $match[2],
+        ];
+    }
+
+    // Fetch product names in one query
+    $productIds = collect($pairs)->pluck('product_id')->unique();
+    $products = \App\Models\Product::whereIn('id', $productIds)->pluck('name', 'id');
+
+    // Add product names
+    $details = collect($pairs)->map(function ($item) use ($products) {
+        return [
+            'product_name' => $products[$item['product_id']] ?? 'Unknown',
+            'quantity' => $item['quantity'],
+        ];
+    });
+
+    return Inertia::render('Prescription/Show', [
+        'prescription' => $prescription,
+        'parsedDetails' => $details,
+    ]);
+}
+
        public function create($appointmentId)
     {
         $appointment = Appointment::with('doctor')->findOrFail($appointmentId);

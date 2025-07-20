@@ -62,6 +62,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->all());
         $request->validate([
             'name' => ['required'],
             'details' => ['nullable'],
@@ -79,19 +80,16 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
-            if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/campaigns'), $filename);
-           $request->photopath = 'uploads/products/' . $filename;
-           }
+           
             $product = new Product();
             $product->name = $request->name;
+             $product->price = $request->price;
+            
             $product->details = $request->details;
             $product->stock_count = $request->stock_count;
 
-            if ($request->hasFile('image')) {
-    $file      = $request->file('image');
+            if ($request->hasFile('photopath')) {
+    $file      = $request->file('photopath');
     $extension = $file->getClientOriginalExtension();
     $filename  = time() . '.' . $extension;
     $file->move(public_path('uploads/products'), $filename);
@@ -152,6 +150,7 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->details = $request->details;
         $product->stock_count = $request->stock_count;
+         $product->price = $request->price;
 
         // Handle image upload
         if ($request->hasFile('image')) {

@@ -14,6 +14,7 @@
                                 <!-- Product Info -->
                                 <InputComponent label="Name" id="name" v-model="form.name" :error="form.errors.name" :isRequired="true" />
                                 <InputComponent label="Stock Count" id="stock_count" type="number" v-model="form.stock_count" :error="form.errors.stock_count" />
+                                <InputComponent label="Price" id="Price" type="number" v-model="form.price" :error="form.errors.price" />
 
                                 <TextAreaComponent label="Details" id="details" v-model="form.details" :error="form.errors.details" />
 
@@ -77,7 +78,7 @@ export default {
                 details: "",
                 photopath: "",
                 stock_count: "",
-
+                price: "",
                 dosage_instructions: "",
                 side_effects: "",
                 precaution: "",
@@ -95,7 +96,7 @@ export default {
             this.form.details = this.product.details;
             this.form.photopath = this.product.photopath;
             this.form.stock_count = this.product.stock_count;
-
+            this.form.price = this.product.price ;
             this.form.dosage_instructions = this.product.howyouse?.dosage_instructions ?? "";
             this.form.side_effects = this.product.howyouse?.side_effects ?? "";
             this.form.precaution = this.product.howyouse?.precaution ?? "";
