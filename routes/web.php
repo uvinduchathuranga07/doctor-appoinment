@@ -12,10 +12,14 @@ use App\Http\Controllers\MediaLibraryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\SpecializationController;
+use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,7 +52,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
     Route::prefix('inquiry')->group(function () {
         Route::get('/', [InquiryController::class, 'index'])->middleware(['can:inquiry.view'])->name('inquiry.index');
         Route::get('/get/data', [InquiryController::class, 'getData'])->middleware(['can:inquiry.view'])->name('inquiry.getdata');
-      
         Route::get('/edit/{id}', [InquiryController::class, 'edit'])->middleware(['can:inquiry.edit'])->name('inquiry.edit');
         Route::post('/', [InquiryController::class, 'update'])->middleware(['can:inquiry.edit'])->name('inquiry.update');
         Route::post('/delete', [InquiryController::class, 'destroy'])->middleware(['can:inquiry.delete'])->name('inquiry.delete');
@@ -93,6 +96,35 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
         ->middleware(['can:doctorshedule.delete'])
         ->name('specialization.destroy');
 });
+Route::prefix('product')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])
+        ->middleware(['can:product.view'])
+        ->name('product.index');
+
+    Route::get('/getdata', [ProductController::class, 'getData'])
+        ->middleware(['can:product.view'])
+        ->name('product.getdata');
+
+    Route::get('/create', [ProductController::class, 'create'])
+        ->middleware(['can:product.create'])
+        ->name('product.create');
+
+    Route::post('/store', [ProductController::class, 'store'])
+        ->middleware(['can:product.create'])
+        ->name('product.store');
+
+    Route::get('/edit/{id}', [ProductController::class, 'edit'])
+        ->middleware(['can:product.edit'])
+        ->name('product.edit');
+
+    Route::post('/update', [ProductController::class, 'update'])
+        ->middleware(['can:product.edit'])
+        ->name('product.update');
+
+    Route::post('/delete', [ProductController::class, 'destroy'])
+        ->middleware(['can:product.delete'])
+        ->name('product.delete');
+});
    Route::prefix('doctor-schedule')->group(function () {
      Route::get('/', [DoctorScheduleController::class, 'index'])->middleware(['can:doctorshedule.view'])->name('doctor-schedule.index');
     Route::get('/getdata', [DoctorScheduleController::class, 'getData'])->middleware(['can:doctorshedule.view'])->name('doctor-schedule.getdata');
@@ -103,14 +135,63 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
     });
 
 Route::prefix('prescription')->group(function () {
-    Route::get('/{scheduleId}', [PrescriptionController::class, 'index'])->middleware(['can:prescription.view'])->name('prescription.index');
-    Route::get('/{scheduleId}/getdata', [PrescriptionController::class, 'getData'])->middleware(['can:prescription.view'])->name('prescription.getdata');
-    Route::get('/{scheduleId}/create', [PrescriptionController::class, 'create'])->middleware(['can:prescription.create'])->name('prescription.create');
-    Route::get('/{scheduleId}/edit/{id}', [PrescriptionController::class, 'edit'])->middleware(['can:prescription.edit'])->name('prescription.edit');
-    Route::post('/store', [PrescriptionController::class, 'store'])->middleware(['can:prescription.create'])->name('prescription.store');
-    Route::post('/update', [PrescriptionController::class, 'update'])->middleware(['can:prescription.edit'])->name('prescriptionupdate');
+    Route::get('/', [PrescriptionController::class, 'index'])
+        ->middleware(['can:prescription.view'])
+        ->name('prescription.index');
+    Route::get('/show/{id}', [PrescriptionController::class, 'show'])->middleware(['can:prescription.view'])->name('prescription.show');
+    Route::get('/getdata', [PrescriptionController::class, 'getData'])
+        ->middleware(['can:prescription.view'])
+        ->name('prescription.getdata');
+
+    Route::get('/{appointmentId}/create', [PrescriptionController::class, 'create'])
+        ->middleware(['can:prescription.create'])
+        ->name('prescription.create');
+
+    Route::get('/{appointmentId}/edit/{id}', [PrescriptionController::class, 'edit'])
+        ->middleware(['can:prescription.edit'])
+        ->name('prescription.edit');
+
+    Route::post('/store', [PrescriptionController::class, 'store'])
+        ->middleware(['can:prescription.create'])
+        ->name('prescription.store');
+
+    Route::post('/update', [PrescriptionController::class, 'update'])
+        ->middleware(['can:prescription.edit'])
+        ->name('prescription.update');
 });
 
+Route::prefix('order')->group(function () {
+   Route::post('/send', [OrderController::class, 'send'])->name('order.send')->middleware(['can:order.create']);
+
+});
+
+Route::get('appointments/book',    [AppointmentController::class, 'index'])->name('appointments.book');
+Route::post('appointments/store',  [AppointmentController::class, 'store'])->name('appointments.store');
+Route::get('appointments/slots/{doctorId}', [AppointmentController::class, 'getAvailableSlots'])
+     ->name('appointments.getAvailableSlots');
+Route::get('appointments',         [AppointmentController::class, 'list'])->name('appointments.list');
+Route::get('appointments/data',    [AppointmentController::class, 'getData'])->name('appointments.getdata');
+
+
+Route::prefix('campaign')->group(function () {
+    Route::get('/', [CampaignController::class, 'index'])->middleware(['can:campaign.view'])->name('campaign.index');
+    Route::get('/getdata', [CampaignController::class, 'getData'])->middleware(['can:campaign.view'])->name('campaign.getdata');
+
+    Route::get('/create', [CampaignController::class, 'create'])->middleware(['can:campaign.create'])->name('campaign.create');
+
+    Route::get('/edit/{id}', [CampaignController::class, 'edit'])
+        ->middleware(['can:campaign.edit'])
+        ->name('campaign.edit');
+
+    Route::post('/store', [CampaignController::class, 'store'])
+        ->middleware(['can:campaign.create'])
+        ->name('campaign.store');
+
+    Route::post('/update', [CampaignController::class, 'update'])
+        ->middleware(['can:campaign.edit'])
+        ->name('campaign.update');
+    Route::delete('/destroy', [CampaignController::class, 'destroy'])->middleware(['can:campaign.delete']) ->name('campaign.destroy');
+});
 
     Route::prefix('customer')->group(function () {
         Route::get('/customer', [CustomerController::class, 'index'])->middleware(['can:customer.view'])->name('customer.index');
@@ -126,7 +207,6 @@ Route::prefix('prescription')->group(function () {
         Route::post('/affiliate-enroll/{id}', [CustomerController::class, 'confirmAffiliateRequest'])->middleware(['can:customer.view'])->name('affilate-customer.enroll');
     });
 
-    // profile
     Route::prefix('profile')->group(function () {
         Route::get('/', [BackendAuthController::class, 'showProfile'])->name('admin.profile');
         Route::put('/update-user-photo', [BackendAuthController::class, 'uploadProfilePhoto'])->middleware(['can:profile.updatePhoto'])->name('profile.update-photo');
@@ -135,7 +215,7 @@ Route::prefix('prescription')->group(function () {
         Route::post('/disable', [BackendAuthController::class, 'disableProfile'])->middleware(['can:profile.deactivate'])->name('profile.disable');
         Route::post('/delete', [BackendAuthController::class, 'deleteProfile'])->middleware(['can:profile.delete'])->name('profile.delete');
     });
-    // settings
+
     Route::prefix('settings')->group(function () {
         Route::get('/general', [SettingsController::class, 'generalSettings'])->middleware(['can:settings.view'])->name('settings.general');
         Route::post('/general', [SettingsController::class, 'generalSettingsUpdate'])->middleware(['can:settings.edit'])->name('settings.general.update');

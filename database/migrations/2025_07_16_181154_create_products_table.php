@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appointments', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
-            $table->foreignId('patient_id')->constrained('customers')->onDelete('cascade');
-            $table->date('appointment_date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->string('status')->default('booked');
+            $table->string('name');
+            $table->text('details');
+            $table->string('photopath')->nullable();
+            $table->integer('stock_count')->default(0);
             $table->timestamps();
         });
-
     }
 
     /**
@@ -29,5 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('products');
     }
 };
