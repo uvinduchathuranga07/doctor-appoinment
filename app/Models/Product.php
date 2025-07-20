@@ -14,6 +14,8 @@ class Product extends Model
         'photopath',
         'stock_count',
     ];
+
+    
     public function howyouse()
 {
     return $this->hasOne(Howyouse::class);
