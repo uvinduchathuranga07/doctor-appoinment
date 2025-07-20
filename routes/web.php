@@ -18,6 +18,7 @@ use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
@@ -159,6 +160,10 @@ Route::prefix('prescription')->group(function () {
         ->name('prescription.update');
 });
 
+Route::prefix('order')->group(function () {
+   Route::post('/send', [OrderController::class, 'send'])->name('order.send')->middleware(['can:order.create']);
+
+});
 
 Route::get('appointments/book',    [AppointmentController::class, 'index'])->name('appointments.book');
 Route::post('appointments/store',  [AppointmentController::class, 'store'])->name('appointments.store');

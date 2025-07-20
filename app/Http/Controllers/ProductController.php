@@ -153,13 +153,13 @@ class ProductController extends Controller
          $product->price = $request->price;
 
         // Handle image upload
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move(public_path('uploads/products'), $filename);
-            $product->photopath = 'uploads/products/' . $filename;
-        }
+                   if ($request->hasFile('photopath')) {
+    $file      = $request->file('photopath');
+    $extension = $file->getClientOriginalExtension();
+    $filename  = time() . '.' . $extension;
+    $file->move(public_path('uploads/products'), $filename);
+    $product->photopath = 'uploads/products/' . $filename;
+}
 
         $product->save();
 
