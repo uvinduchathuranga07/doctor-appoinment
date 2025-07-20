@@ -75,6 +75,8 @@ Route::prefix('v1')->group(function() {
         Route::post('/leavecampaigns',[campaignController::class,'leaveformCampaigns']);
 
         Route::get('/getproducts',[MarketplaceController::Class,'getProducts']);
+        Route::post('/setproducts',[MarketplaceController::Class,'setProducts']);
+        Route::get('/getorders',[MarketplaceController::Class,'getOrdersByUser']);
     });
     
 });
