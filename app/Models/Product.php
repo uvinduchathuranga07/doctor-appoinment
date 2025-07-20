@@ -13,6 +13,7 @@ class Product extends Model
         'details',
         'photopath',
         'stock_count',
+        'price',
     ];
     public function howyouse()
 {
