@@ -26,13 +26,18 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $vehicle_count = '5';
-        $customer_count = '6';
-        $inquiry_count = '8';
-        $testimonial_count = '6';
+      
 
-        // dd($customer_count);
-        return Inertia::render('Dashboard/Index',['vehicle_count' => $vehicle_count, 'customer_count' => $customer_count, 'inquiry_count' => $inquiry_count, 'testimonial_count' => $testimonial_count]);
+        // New counts
+        $backend_user_count = User::where('is_backend', true)->count();
+        $prescription_count = Prescription::count();
+        $active_campaign_count = Campaign::where('status', 'active')->count();
 
+        return Inertia::render('Dashboard/Index', [
+         
+            'backend_user_count' => $backend_user_count,
+            'prescription_count' => $prescription_count,
+            'active_campaign_count' => $active_campaign_count,
+        ]);
     }
 }
