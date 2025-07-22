@@ -86,16 +86,35 @@ class RolesPermissionSeeder extends Seeder
             ['section_name' => 'doctor', 'name' => 'doctor.edit'],
             ['section_name' => 'doctor', 'name' => 'doctor.delete'],
            
+            ['section_name' => 'specialization', 'name' => 'specialization.view'],
+            ['section_name' => 'specialization', 'name' => 'specialization.create'],
+            ['section_name' => 'specialization', 'name' => 'specialization.edit'],
+            ['section_name' => 'specialization', 'name' => 'specialization.delete'],
+
             ['section_name' => 'shedules', 'name' => 'doctorshedule.view'],
             ['section_name' => 'shedules', 'name' => 'doctorshedule.create'],
             ['section_name' => 'shedules', 'name' => 'doctorshedule.edit'],
             ['section_name' => 'shedules', 'name' => 'doctorshedule.delete'],
            
 
+            ['section_name' => 'pharmacy', 'name' => 'pharmacy.view'],
+            ['section_name' => 'order', 'name' => 'order.create'],
+
+            ['section_name' => 'appointments', 'name' => 'appointments.view'],
+            ['section_name' => 'appointments', 'name' => 'appointments.create'],
+            ['section_name' => 'appointments', 'name' => 'appointments.edit'],
+            ['section_name' => 'appointments', 'name' => 'appointments.delete'],
+
             ['section_name' => 'prescription', 'name' => 'prescription.view'],
             ['section_name' => 'prescription', 'name' => 'prescription.create'],
             ['section_name' => 'prescription', 'name' => 'prescription.edit'],
             ['section_name' => 'prescription', 'name' => 'prescription.delete'],
+
+            ['section_name' => 'campaign', 'name' => 'campaign.view'],
+            ['section_name' => 'campaign', 'name' => 'campaign.create'],
+            ['section_name' => 'campaign', 'name' => 'campaign.edit'],
+            ['section_name' => 'campaign', 'name' => 'campaign.delete'],
+
 
             ['section_name' => 'employees', 'name' => 'employees.view'],
             ['section_name' => 'employees', 'name' => 'employees.create'],

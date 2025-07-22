@@ -51,9 +51,7 @@ class CustomerController extends Controller
                 if (auth()->user()->can('backend-user.edit')) {
                     $action_html .= '<a class="dropdown-item ' . ($row->status == 1 ? 'text-warning' : 'text-success') . ' action_status_change" style="font-size: 14px;padding: 5px 13px;" data-item-id="' . $row->id . '" data-status="' . $row->status . '" href="javascript:void(0)"><i class="fas fa-power-off mr-2"></i>' . ($row->status == 1 ? ' Deactivate' : ' Activate') . '</a> ';
                 }
-                if (auth()->user()->can('backend-user.edit')) {
-                    $action_html .= '<a class="dropdown-item action_affiliate_customer" style="font-size: 14px;padding: 5px 13px;" data-item-id="' . $row->id . '" href="javascript:void(0)"><i class="fas fa-power-off mr-2"></i> Affiliate Customers</a> ';
-                }
+
                 $action_html .= '<div class="dropdown-divider"></div>';
                 if (auth()->user()->can('backend-user.delete')) {
                     $action_html .= '<a class="dropdown-item text-danger action_delete" data-bs-toggle="modal" data-bs-target="#deleteConfirm" style="font-size: 14px;padding: 5px 13px;" data-item-id="' . $row->id . '" href="javascript:void(0)"><i class="fas fa-trash mr-2"></i> Delete</a> ';

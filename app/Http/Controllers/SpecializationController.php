@@ -22,20 +22,31 @@ class SpecializationController extends Controller
      * Return JSON for DataTables.
      */
     public function getData()
-    {
-        $specializations = Specialization::all();
+{
+    $specializations = Specialization::all();
 
-        return DataTables::of($specializations)
-            ->addColumn('check', fn($row) => '<input type="checkbox" value="'.$row->id.'"/>')
-            ->addColumn('action', function($row) {
-                return '
-                  <a class="dropdown-item action_edit" data-item-id="'.$row->id.'" href="#">Edit</a>
-                  <a class="dropdown-item action_delete" data-item-id="'.$row->id.'" href="#">Delete</a>
-                ';
-            })
-            ->rawColumns(['check','action'])
-            ->make(true);
-    }
+    return DataTables::of($specializations)
+        ->addColumn('check', fn ($row) => '
+            <div class="custom-control custom-checkbox item-check">
+                <input type="checkbox" class="form-check-input" id="spec_' . $row->id . '" value="' . $row->id . '">
+                <label class="form-check-label" for="spec_' . $row->id . '"></label>
+            </div>
+        ')
+        ->addColumn('action', function ($row) {
+            return '
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-main dropdown-toggle" data-bs-toggle="dropdown">Action</button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item action_edit" href="#" data-item-id="' . $row->id . '"><i class="fas fa-edit me-2"></i> Edit</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger action_delete" href="#" data-item-id="' . $row->id . '" data-bs-toggle="modal" data-bs-target="#deleteConfirm"><i class="fas fa-trash me-2"></i> Delete</a></li>
+                    </ul>
+                </div>
+            ';
+        })
+        ->rawColumns(['check', 'action'])
+        ->make(true);
+}
 
     /**
      * Show the create form.

@@ -31,6 +31,29 @@
               </select>
               <div class="text-danger">{{ form.errors.specialization_id }}</div>
             </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" v-model="form.password" />
+              <div class="text-danger">{{ form.errors.password }}</div>
+            </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" v-model="form.password_confirmation" />
+              <div class="text-danger">{{ form.errors.password_confirmation }}</div>
+            </div>
+          </div>
+          <div class="mb-3 col-md-6">
+                  <label for="role" class="form-label">Role</label>
+                  <select class="select2 form-control form-select" id="role" aria-label="Default select example"
+                    v-model="form.role">
+                    <option selected value="">-- Select --</option>
+                    <option v-for="r in allRoles" :key="r.id" :value="r.id">
+                      {{ r.name }}
+                    </option>
+                  </select>
+                  <div class="text-danger">
+                    {{ form.errors.role }}
+                  </div>
           </div>
           <button type="submit" class="btn btn-main me-2">Save</button>
           <Link class="btn btn-outline-danger" :href="route('doctor.index')">Cancel</Link>
@@ -49,6 +72,7 @@ export default {
   props: {
     doctor: Object,
     specializations: Array,
+    allRoles: Object,
   },
   data() {
     return {
@@ -57,7 +81,10 @@ export default {
         name: this.doctor?.name || "",
         email: this.doctor?.email || "",
         phone: this.doctor?.phone || "",
+        role: this.doctor?.role_id || "",
         specialization_id: this.doctor?.specialization_id || "",
+        password: "",
+        password_confirmation: "",
       }),
     };
   },

@@ -47,6 +47,17 @@
                     {{ form.errors.role }}
                   </div>
                 </div>
+                 <div class="mb-3 col-md-6">
+                  <label for="role" class="form-label">Select Pharmacy</label>
+                  <select class="select2 form-control form-select" id="Pharmacy" aria-label="Default select example"
+                    v-model="form.Pharmacy">
+                    <option selected value="">-- Select --</option>
+                   
+                  </select>
+                  <div class="text-danger">
+                    {{ form.errors.Pharmacy }}
+                  </div>
+                </div>
                 <!-- <div class="mb-3 col-md-6">
                   <label for="branch" class="form-label">Branch</label>
                   <select class="select2 form-control form-select" id="branch" aria-label="Default select example"
@@ -224,6 +235,7 @@ export default {
         branch: "",
         password: "",
         password_confirmation: "",
+        Pharmacy: "",
         profile_image: "",
       }),
       password: useForm({
@@ -244,6 +256,7 @@ export default {
       this.form.mobile_no = this.backendUser.mobile_no;
       this.form.role =
         this.backendUser.roles.length > 0 ? this.backendUser.roles[0].id : "";
+      this.form.Pharmacy =this.backendUser.pharmacy_name;
       this.form.branch = this.backendUser.branch?.id;
     }
     $(".card-body").on("change", "#role", function (evt) {

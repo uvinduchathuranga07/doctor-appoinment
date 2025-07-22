@@ -17,19 +17,33 @@ class DoctorScheduleController extends Controller
         return Inertia::render('DoctorSchedule/Index');
     }
 
-    public function getData()
-    {
-        $schedules = DoctorSchedule::with('doctor')->get();
-        return DataTables::of($schedules)
-            ->addColumn('check', fn($row) => '<input type="checkbox" value="'.$row->id.'" />')
-            ->addColumn('doctor', fn($row) => $row->doctor->name)
-            ->addColumn('action', function ($row) {
-                return '<a class="dropdown-item action_edit" data-item-id="' . $row->id . '" href="#">Edit</a>';
-            })
-            ->rawColumns(['check', 'doctor', 'action'])
-            ->make(true);
-    }
+public function getData()
+{
+    $schedules = DoctorSchedule::with('doctor')->get();
 
+    return DataTables::of($schedules)
+        ->addColumn('check', fn ($row) => '
+            <div class="custom-control custom-checkbox item-check">
+                <input type="checkbox" class="form-check-input" id="schedule_' . $row->id . '" value="' . $row->id . '">
+                <label class="form-check-label" for="schedule_' . $row->id . '"></label>
+            </div>
+        ')
+        ->addColumn('doctor', fn ($row) => $row->doctor->name)
+        ->addColumn('action', function ($row) {
+            return '
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-main dropdown-toggle" data-bs-toggle="dropdown">Action</button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item action_edit" href="#" data-item-id="' . $row->id . '"><i class="fas fa-edit me-2"></i> Edit</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger action_delete" href="#" data-item-id="' . $row->id . '" data-bs-toggle="modal" data-bs-target="#deleteConfirm"><i class="fas fa-trash me-2"></i> Delete</a></li>
+                    </ul>
+                </div>
+            ';
+        })
+        ->rawColumns(['check', 'doctor', 'action'])
+        ->make(true);
+}
     public function create()
     {
         $doctors = Doctor::select('id', 'name')->get();
