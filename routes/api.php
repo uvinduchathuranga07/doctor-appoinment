@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\InquiryController;
 
 use App\Http\Controllers\Api\v1\DoctorController;
 use App\Http\Controllers\Api\v1\campaignController;
+use App\Http\Controllers\Api\v1\MarketplaceController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -70,6 +71,12 @@ Route::prefix('v1')->group(function() {
 
         Route::get('/getcampaigns',[campaignController::class,'getCampaigns']);
         Route::post('/savecampaigns',[campaignController::class,'saveCampaigns']);
+        Route::post('/getcampaignsbyuser',[campaignController::class,'getCampaignsByuser']);
+        Route::post('/leavecampaigns',[campaignController::class,'leaveformCampaigns']);
+
+        Route::get('/getproducts',[MarketplaceController::Class,'getProducts']);
+        Route::post('/setproducts',[MarketplaceController::Class,'setProducts']);
+        Route::get('/getorders',[MarketplaceController::Class,'getOrdersByUser']);
     });
     
 });

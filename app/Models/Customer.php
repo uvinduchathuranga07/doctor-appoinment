@@ -23,4 +23,9 @@ class Customer extends Authenticatable implements HasMedia
         'name', 'email', 'phone', 'password', 'type',
     ];
 
+        public function campaings()
+    {
+        return $this->belongsToMany(Campaign::class, 'join_event', 'user_id', 'event_id');
+    }
+
 }

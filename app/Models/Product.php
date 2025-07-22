@@ -15,6 +15,8 @@ class Product extends Model
         'stock_count',
         'price',
     ];
+
+    
     public function howyouse()
 {
     return $this->hasOne(Howyouse::class);

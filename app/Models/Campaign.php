@@ -14,4 +14,13 @@ class Campaign extends Model
         'details',
         'photopath',
     ];
+
+
+
+    public function customers()
+    {
+        return $this->belongsToMany(Customer::class, 'join_event', 'event_id', 'user_id');
+    }
+
+
 }
