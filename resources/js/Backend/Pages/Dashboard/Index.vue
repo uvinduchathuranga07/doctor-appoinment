@@ -78,29 +78,34 @@ Chart.register(...registerables);
 
 export default {
   components: { AppLayout, Link },
+  props: {
+  backend_user_count: Number,
+  prescription_count: Number,
+  active_campaign_count: Number,
+},
   data() {
     return {
       // remove Vehicles, only three summary cards
       summaryCards: [
         {
-          label: 'Customers',
-          count: 120,
+          label: 'Employees',
+          count: this.backend_user_count,
           icon: 'users',
           iconBox: 'bg-warning',
           iconClass: 'font-primary',
           boxClass: 'primary-box',
         },
         {
-          label: 'Inquiries',
-          count: 45,
+          label: 'Prescriptions',
+          count: this.prescription_count,
           icon: 'git-pull-request',
           iconBox: 'bg-primary',
           iconClass: 'font-primary',
           boxClass: 'primary-box',
         },
         {
-          label: 'Prescriptions',
-          count: 30,
+           label: 'Active Campaigns',
+          count: this.active_campaign_count,
           icon: 'message-square',
           iconBox: 'bg-black',
           iconClass: 'font-primary',
@@ -127,11 +132,24 @@ export default {
       ],
       extraInfo: [
         { label: 'Active Pharmacies', value: 2 },
-        { label: 'Doctors On Duty', value: 8 },
-        { label: 'Pending Prescriptions', value: 14 },
+        { label: 'Doctors On Duty', value: 3 },
+        { label: 'Pending Prescriptions', value: 1 },
       ],
     };
   },
+  computed: {
+  orderedAppointments() {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const map = Object.fromEntries(this.appointmentData.map(d => [d.day, d.count]));
+    return days.map(day => ({ day, count: map[day] || 0 }));
+  },
+  orderedPrescriptions() {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const map = Object.fromEntries(this.prescriptionData.map(d => [d.day, d.count]));
+    return days.map(day => ({ day, count: map[day] || 0 }));
+  }
+},
+
   mounted() {
     if (window.feather) window.feather.replace();
 
@@ -144,7 +162,7 @@ export default {
         datasets: [
           {
             label: 'Appointments',
-            data: this.appointmentData.map((d) => d.count),
+           data: this.appointmentData.map((d) => d.count),
           },
         ],
       },
@@ -160,11 +178,11 @@ export default {
     new Chart(ctxP, {
       type: 'line',
       data: {
-        labels: this.prescriptionData.map((d) => d.day),
+        labels: this.orderedAppointments.map((d) => d.day),
         datasets: [
           {
             label: 'Prescriptions',
-            data: this.prescriptionData.map((d) => d.count),
+            data: this.orderedAppointments.map((d) => d.count),
             fill: false,
             tension: 0.4,
             borderWidth: 2,
