@@ -40,10 +40,10 @@ Route::get('oauth/{driver}/callback', [FrontendAuthController::class, 'handlePro
   Route::post('/login', [FrontendAuthController::class, 'makeLogin'])->name('front.end.customer.login');
   Route::get('/logout', [FrontendAuthController::class, 'makeLogout'])->name('front.end.customer.logout');
 
-  Route::get('/getdata', [HomeController::class, 'getdata'])->name('index.getdata');
-  Route::post('/enroll-to-affiliate', [FrontendAuthController::class, 'enrollToAffiliate'])->name('frontend.enroll-affiliate');
-  Route::post('/submit-inquiry', [InquiryController::class, 'submit'])->name('submit-inquiry');
-  Route::get('/app-download', [PageController::class, 'AppDownload'])->name('appdownload');
+  // Route::get('/getdata', [HomeController::class, 'getdata'])->name('index.getdata');
+  // Route::post('/enroll-to-affiliate', [FrontendAuthController::class, 'enrollToAffiliate'])->name('frontend.enroll-affiliate');
+  // Route::post('/submit-inquiry', [InquiryController::class, 'submit'])->name('submit-inquiry');
+  // Route::get('/app-download', [PageController::class, 'AppDownload'])->name('appdownload');
 
   Route::get('test-email', function() {
     return view('emails.inquiry-submit', ['inquiry' => \App\Models\Inquiry::find(1)]);
