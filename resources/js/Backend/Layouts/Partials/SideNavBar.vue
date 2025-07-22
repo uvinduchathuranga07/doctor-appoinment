@@ -23,13 +23,7 @@
         </Link>
       </li>
 
-      <li class="menu-item" :class="{ active: addActiveClass(['inquiry.index', 'inquiry.getdata', 'inquiry.edit']) }"
-          v-if="$root.hasPermission('inquiry.view')">
-        <Link :href="route('inquiry.index')" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-question-mark"></i>
-          <div data-i18n="Inquiry">Inquiry</div>
-        </Link>
-      </li>
+     
 
       <li class="menu-item" :class="{ active: addActiveClass(['doctor.index','doctor.create','doctor.edit','doctor.getdata']) }"
           v-if="$root.hasPermission('doctor.view')">
