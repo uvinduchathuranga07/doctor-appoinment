@@ -22,6 +22,10 @@
               <input class="form-control" v-model="form.phone" />
             </div>
             <div class="mb-3 col-md-6">
+              <label class="form-label">Price</label>
+              <input class="form-control" type="number" v-model="form.price" />
+            </div>
+            <div class="mb-3 col-md-6">
               <label class="form-label">Specialization</label>
               <select class="form-control" v-model="form.specialization_id">
                 <option disabled value="">Select Specialization</option>
@@ -84,6 +88,7 @@ export default {
         role: this.doctor?.role_id || "",
         specialization_id: this.doctor?.specialization_id || "",
         password: "",
+        price: this.doctor?.price || "",
         password_confirmation: "",
       }),
     };

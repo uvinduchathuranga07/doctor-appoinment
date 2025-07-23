@@ -54,6 +54,12 @@
           <i class="menu-icon tf-icons bx bx-package"></i> <div data-i18n="Products">Products</div>
         </Link>
       </li>
+      <li class="menu-item" :class="{ active: addActiveClass(['appointments.index','appointments.create','appointments.edit','appointments.getdata']) }"
+          v-if="$root.hasPermission('appointments.view')">
+        <Link :href="route('appointments.list')" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-building"></i> <div data-i18n="Specialization">Appointments</div>
+        </Link>
+      </li>
 
       <li class="menu-item"
           v-if="$root.hasPermission('prescription.view') && $page.props.scheduleId"

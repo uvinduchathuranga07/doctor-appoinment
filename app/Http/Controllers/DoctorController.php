@@ -61,16 +61,16 @@ class DoctorController extends Controller
     public function store(Request $request)
     {
 
-       
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:doctors,email',
             'phone' => 'nullable',
             'specialization_id' => 'required|exists:specializations,id',
+            'price' => 'nullable',
         ]);
 
         try {
-            Doctor::create($request->only('name', 'email', 'phone', 'specialization_id'));
+            Doctor::create($request->only('name', 'email', 'phone', 'specialization_id', 'price'));
             DB::beginTransaction();
 
             $user = new User();

@@ -61,9 +61,7 @@ class AppointmentController extends Controller
         return response()->json($slots);
     }
 
-    /**
-     * Store a new appointment.
-     */
+  
     public function store(Request $request)
     {
         //dd($request->all());
