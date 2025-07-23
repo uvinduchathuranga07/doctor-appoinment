@@ -17,7 +17,7 @@ class DoctorController extends Controller
 
     public function index(Request $request){
        try {
-            $specializationId = $request->specialization_id;
+            $specializationId = ($request->specialization_id);
             $query = Doctor::with('specialization')->with('schedules');
 
             Log::alert($specializationId);
@@ -49,6 +49,13 @@ class DoctorController extends Controller
 
     public function saveAppointment(Request $request){
         try {
+            $exist = Appointment::where('appointment_date', $request->appointment_date)
+                        ->where('start_time', $request->start_time)->exists();
+
+            if($exist){
+                return $this->errorResponse('Time slot was booked.', 500);
+            }
+
             Log::alert($request);
             DB::beginTransaction();
 
