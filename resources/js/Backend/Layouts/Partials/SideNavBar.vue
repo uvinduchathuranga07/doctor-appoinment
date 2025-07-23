@@ -84,7 +84,13 @@
           <div data-i18n="Customer">Customer</div>
         </Link>
       </li>
-      
+        <li class="menu-item" :class="{ active: addActiveClass(['prescription.index', 'prescription.view']) }"
+          v-if="$root.hasPermission('prescription.view')">
+        <Link :href="route('prescription.index')" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-note"></i>
+          <div data-i18n="Pharmacy">prescription</div>
+        </Link>
+      </li>
       <li class="menu-item" :class="{ active: addActiveClass(['report.index']) }"
           v-if="$root.hasPermission('report.view')">
         <Link :href="route('report.index')" class="menu-link">

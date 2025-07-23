@@ -95,7 +95,7 @@ export default {
 
       this.sending = true;
       try {
-        this.$inertia.post(route('order.send'), {
+           axios.post(route('order.send'), {
           prescription_id: this.prescription.id,
           pharmacy_name: this.pharmacyName,
         });

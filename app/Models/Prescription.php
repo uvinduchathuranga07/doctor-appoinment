@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Prescription extends Model
 {
     protected $fillable = [
-        'appointment_id',
+        'doctor_schedule_id',
         'patient_id',
         'details',
         'status',
-        'pharmacy_name',
+       
     ];
 
     protected $casts = [

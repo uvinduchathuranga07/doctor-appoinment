@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 use App\Models\Product;
 use Yajra\DataTables\Facades\DataTables;
 use Exception;
@@ -26,20 +27,18 @@ class PrescriptionController extends Controller
 
   public function getData()
 {
-    $prescriptions = Prescription::with(['appointment.doctor', 'patient'])->latest();
+    $prescriptions = Prescription::with('patient')->latest();
 
     return DataTables::of($prescriptions)
-        ->addColumn('doctor', fn($p) => $p->appointment?->doctor?->name ?? '—')
         ->addColumn('patient', fn($p) => $p->patient?->name ?? '—')
-        ->addColumn('date', fn($p) => optional($p->appointment)->appointment_date)
         ->addColumn('status', fn($p) => ucfirst($p->status))
-        ->addColumn('pharmacy', fn($p) => $p->pharmacy_name ?? '-')
-       ->addColumn('action', fn($p) => '
-    <a href="' . route('prescription.show', $p->id) . '" class="btn btn-sm btn-outline-info">View</a>
-')
+        ->addColumn('action', fn($p) => '
+            <a href="' . route('prescription.show', $p->id) . '" class="btn btn-sm btn-outline-info">View</a>
+        ')
         ->rawColumns(['action'])
         ->make(true);
 }
+
 public function show($id)
 {
     $prescription = Prescription::with(['appointment.doctor', 'patient'])->findOrFail($id);
@@ -106,17 +105,18 @@ public function show($id)
 
         try {
             Prescription::create([
-                'appointment_id' => $request->appointment_id,
+                'doctor_schedule_id' => $request->appointment_id,
                 'patient_id' => $request->patient_id,
                 'details' => $detailsString, // Laravel will cast to JSON
                 'status' => $request->status,
-                'pharmacy_name' => $request->pharmacy_name,
+               
             ]);
 
             return redirect()
                 ->route('prescription.index', $request->appointment_id)
                 ->with('success', 'Prescription added.');
         } catch (Exception $ex) {
+            Log::error('Error adding prescription: ' . $ex->getMessage());
             return back()->withErrors('An error occurred while adding the prescription.');
         }
     }

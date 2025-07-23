@@ -104,7 +104,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'web']], function () 
 
 });
 
-Route::prefix(' ')->group(function () {
+Route::prefix('prescription')->group(function () {
     Route::get('/', [PrescriptionController::class, 'index'])->middleware(['can:prescription.view'])->name('prescription.index');
     Route::get('/show/{id}', [PrescriptionController::class, 'show'])->middleware(['can:prescription.view'])->name('prescription.show');
     Route::get('/getdata', [PrescriptionController::class, 'getData'])->middleware(['can:prescription.view'])->name('prescription.getdata');
