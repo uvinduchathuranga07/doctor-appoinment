@@ -125,7 +125,9 @@ Route::get('appointments/slots/{doctorId}', [AppointmentController::class, 'getA
 Route::get('appointments',         [AppointmentController::class, 'list'])->name('appointments.list')->middleware(['can:appointments.view']);
 Route::get('appointments/data',    [AppointmentController::class, 'getData'])->name('appointments.getdata')->middleware(['can:appointments.view']);
 
-
+Route::prefix('Bulk')->group(function () {
+    Route::get('/', [DoctorController::class, 'bulkupdate'])->middleware(['can:doctor.view'])->name('doctor.bulk');
+});
 
 Route::prefix('campaign')->group(function () {
     Route::get('/', [CampaignController::class, 'index'])->middleware(['can:campaign.view'])->name('campaign.index');

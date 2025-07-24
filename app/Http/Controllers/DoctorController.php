@@ -132,4 +132,8 @@ class DoctorController extends Controller
 
         return redirect()->route('doctor.index')->with('success', 'Doctor updated.');
     }
+
+    public function bulkupdate(){
+         return Inertia::render('BulkUser/CreateUpdate');
+    }
 }

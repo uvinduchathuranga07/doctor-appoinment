@@ -106,6 +106,17 @@
           <div data-i18n="Pharmacy">Pharmacy</div>
         </Link>
       </li>
+      <li
+  class="menu-item"
+  :class="{ active: addActiveClass(['doctor.bulk']) }"
+  v-if="$root.hasPermission('doctor.view')"
+>
+  <Link :href="route('doctor.bulk')" class="menu-link">
+    <i class="menu-icon tf-icons bx bx-upload"></i>
+    <div data-i18n="Bulk Users">Bulk Addons</div>
+  </Link>
+</li>
+
       
       <li class="menu-item" v-bind:class="{
           'active open': addActiveClass([
