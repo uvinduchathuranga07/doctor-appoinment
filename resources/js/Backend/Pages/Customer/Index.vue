@@ -40,7 +40,7 @@
                   <th>Customer</th>
                   <th>Status</th>
                   <th>Image</th>
-                  <th>Type</th>
+                 
                   <th>Action</th>
                 </tr>
               </template>
@@ -121,7 +121,7 @@ export default {
        
         { data: "status", name: "status", orderable: true },
         { data: "image", name: "image", orderable: false, searchable: true },
-        { data: "type", name: "type", orderable: false, searchable: true },
+       
         { data: "action", name: "action", orderable: true },
       ],
       columnDefs: [{ className: "text-center", targets: [] }],

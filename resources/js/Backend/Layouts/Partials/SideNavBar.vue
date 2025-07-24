@@ -176,13 +176,13 @@
             <div data-i18n="General Settings">General Settings</div>
             </Link>
           </li>
-          <li class="menu-item" v-bind:class="{
+          <!-- <li class="menu-item" v-bind:class="{
             active: addActiveClass(['settings.social-auth']),
           }" v-if="$root.hasPermission('system-setting.view')">
             <Link :href="route('settings.social-auth')" class="menu-link">
             <div data-i18n="Social Auth Settings">Social Auth Settings</div>
             </Link>
-          </li>
+          </li> -->
           <li class="menu-item" v-bind:class="{
             active: addActiveClass(['currencies.index']),
           }" v-if="$root.hasPermission('currencies.view')">
