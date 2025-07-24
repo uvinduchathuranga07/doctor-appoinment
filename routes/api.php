@@ -1,13 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\v1\AuctionController;
+
 use App\Http\Controllers\Api\v1\Auth\CustomerAuthController;
-use App\Http\Controllers\Api\v1\CustomerController;
-use App\Http\Controllers\Api\v1\ManufactureController;
-use App\Http\Controllers\Api\v1\ModelController;
-use App\Http\Controllers\Api\v1\VehicleController;
-use App\Http\Controllers\Api\v1\VehicleTypeController;
-use App\Http\Controllers\Frontend\InquiryController;
 
 use App\Http\Controllers\Api\v1\DoctorController;
 use App\Http\Controllers\Api\v1\campaignController;

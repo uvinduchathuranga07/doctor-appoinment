@@ -3,7 +3,6 @@
 use App\Http\Controllers\Frontend\FrontendAuthController;
 use App\Http\Controllers\Frontend\FrontEndCustomerController;
 use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\InquiryController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
