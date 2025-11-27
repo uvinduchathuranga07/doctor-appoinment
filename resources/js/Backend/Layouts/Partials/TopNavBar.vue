@@ -25,27 +25,20 @@
       </li>
     </ul>
       <ul class="navbar-nav flex-row align-items-center ms-auto">
-        <!-- branch change -->
-        <!-- <li
-          class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1"
-          style="width: 215px"
-        >
-          <select
-            class="select2 form-control form-select"
-            id="branch_select"
-            v-model="branchSelect.id"
+
+        <!-- Theme toggle -->
+        <li class="nav-item me-2">
+          <button
+            class="btn btn-sm btn-icon"
+            type="button"
+            :aria-label="theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+            @click="$emit('toggle-theme')"
+            title="Toggle dark mode"
           >
-       
-            <option selected value="null">Super Admin</option>
-            <option
-              :value="branch.id"
-              v-for="branch in $page.props.all_branches"
-              :key="branch.id"
-            >
-              {{ branch.name }}
-            </option>
-          </select>
-        </li> -->
+            <i :class="theme === 'dark' ? 'bx bx-sun' : 'bx bx-moon'"></i>
+          </button>
+        </li>
+
         <!-- Notification -->
         <li
           class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1"
@@ -245,103 +238,6 @@
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar">
                         <span
-                          class="avatar-initial rounded-circle bg-label-success"
-                          ><i class="bx bx-pie-chart-alt"></i
-                        ></span>
-                      </div>
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="mb-1">Monthly report is generated</h6>
-                      <p class="mb-0">
-                        July monthly financial report is generated
-                      </p>
-                      <small class="text-muted">3 days ago</small>
-                    </div>
-                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                      <a
-                        href="javascript:void(0)"
-                        class="dropdown-notifications-read"
-                        ><span class="badge badge-dot"></span
-                      ></a>
-                      <a
-                        href="javascript:void(0)"
-                        class="dropdown-notifications-archive"
-                        ><span class="bx bx-x"></span
-                      ></a>
-                    </div>
-                  </div>
-                </li>
-                <li
-                  class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read"
-                >
-                  <div class="d-flex">
-                    <div class="flex-shrink-0 me-3">
-                      <div class="avatar">
-                        <img
-                          src="/images/profile-avatar.png"
-                          alt
-                          class="w-px-40 h-auto rounded-circle"
-                        />
-                      </div>
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="mb-1">Send connection request</h6>
-                      <p class="mb-0">Peter sent you connection request</p>
-                      <small class="text-muted">4 days ago</small>
-                    </div>
-                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                      <a
-                        href="javascript:void(0)"
-                        class="dropdown-notifications-read"
-                        ><span class="badge badge-dot"></span
-                      ></a>
-                      <a
-                        href="javascript:void(0)"
-                        class="dropdown-notifications-archive"
-                        ><span class="bx bx-x"></span
-                      ></a>
-                    </div>
-                  </div>
-                </li>
-                <li
-                  class="list-group-item list-group-item-action dropdown-notifications-item"
-                >
-                  <div class="d-flex">
-                    <div class="flex-shrink-0 me-3">
-                      <div class="avatar">
-                        <img
-                          src="/images/profile-avatar.png"
-                          alt
-                          class="w-px-40 h-auto rounded-circle"
-                        />
-                      </div>
-                    </div>
-                    <div class="flex-grow-1">
-                      <h6 class="mb-1">New message from Jane</h6>
-                      <p class="mb-0">Your have new message from Jane</p>
-                      <small class="text-muted">5 days ago</small>
-                    </div>
-                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                      <a
-                        href="javascript:void(0)"
-                        class="dropdown-notifications-read"
-                        ><span class="badge badge-dot"></span
-                      ></a>
-                      <a
-                        href="javascript:void(0)"
-                        class="dropdown-notifications-archive"
-                        ><span class="bx bx-x"></span
-                      ></a>
-                    </div>
-                  </div>
-                </li>
-                <li
-                  class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read"
-                >
-                  <div class="d-flex">
-                    <div class="flex-shrink-0 me-3">
-                      <div class="avatar">
-                        <span
                           class="avatar-initial rounded-circle bg-label-warning"
                           ><i class="bx bx-error"></i
                         ></span>
@@ -469,7 +365,12 @@ export default {
     Link,
     SelectInputComponent,
   },
-  props: {},
+  props: {
+    theme: {
+      type: String,
+      default: 'light'
+    }
+  },
   data() {
     return {
       branchSelect: useForm({

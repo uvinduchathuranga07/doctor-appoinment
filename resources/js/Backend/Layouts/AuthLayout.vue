@@ -14,8 +14,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    // Respect saved theme on auth pages too
+    const saved = localStorage.getItem("theme");
+    const isDark = saved === "dark";
+    const html = document.documentElement;
+    html.classList.toggle("theme-dark", isDark);
+    html.classList.toggle("theme-light", !isDark);
+  }
+};
 </script>
 
-<style>
-</style>
+
+<style src="../../../../public/css/backend/dark-theme.css"></style>

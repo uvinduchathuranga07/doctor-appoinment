@@ -5,7 +5,7 @@
             <SideNavBar />
             <!-- Layout container -->
             <div class="layout-page">
-                <TopNavBar />
+                <TopNavBar :theme="theme" @toggle-theme="toggleTheme" />
                 <!-- Content wrapper -->
                 <div class="content-wrapper">
                     <!-- Content -->
@@ -32,7 +32,16 @@ export default {
         SideNavBar,
         FooterBar,
     },
+    data() {
+        return {
+            theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
+        };
+    },
     mounted() {
+        // Apply theme first to avoid flash
+        this.applyTheme();
+
+        // Existing initializations
         feather.replace();
         $( document ).ready(function() {
        //    responsive sidebar
@@ -107,6 +116,17 @@ export default {
         
     },
     methods: {
+        applyTheme() {
+            const isDark = this.theme === "dark";
+            const html = document.documentElement;
+            html.classList.toggle("theme-dark", isDark);
+            html.classList.toggle("theme-light", !isDark);
+        },
+        toggleTheme() {
+            this.theme = this.theme === "dark" ? "light" : "dark";
+            localStorage.setItem("theme", this.theme);
+            this.applyTheme();
+        },
         switchToTeam(team) {
             this.$inertia.put(
                 route("current-team.update"),
@@ -126,3 +146,5 @@ export default {
     },
 };
 </script>
+
+<style src="../../../../public/css/backend/dark-theme.css"></style>

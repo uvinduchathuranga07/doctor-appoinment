@@ -3,7 +3,7 @@
     <div class="app-brand demo justify-content-center">
       <a href="/admin" class="app-brand-link" style="justify-content: center">
         <span class="app-brand-logo demo" style="justify-content: center">
-          <img :src="'/images/wellbeign.jpeg'" alt="" style="height: 50px; width: auto" />
+          <img :src="'/images/wellbeign.png'" alt="" style="height: 50px; width: auto" />
         </span>
         <span class="app-brand-text demo menu-text fw-bolder ms-2"></span>
       </a>
